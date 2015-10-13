@@ -6,9 +6,9 @@ var sinonChai = require("sinon-chai");
 var expect = chai.expect;
 chai.use(sinonChai);
 
-import {IRule} from "../lib/IRule";
-import {Validator} from "../lib/Validator";
-import {RulesCollection} from "../lib/RulesCollection";
+import {IRule} from "../src/lib/IRule";
+import {Validator} from "../src/lib/Validator";
+import {RulesCollection} from "../src/lib/RulesCollection";
 
 describe('Validator', () => {
   var validator:Validator = null;

@@ -3,8 +3,8 @@
 import chai = require('chai');
 var expect:any = chai.expect;
 
-import {IRule} from "../lib/IRule";
-import {RulesCollection} from "../lib/RulesCollection";
+import {IRule} from "../src/lib/IRule";
+import {RulesCollection} from "../src/lib/RulesCollection";
 
 describe('RulesCollection', () => {
     it('add a rule', () => {

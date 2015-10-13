@@ -8,19 +8,19 @@
     "sourceMap": true
   },
   "filesGlob": [
-    "data-validation.ts",
-    "lib/**/*.ts",
+    "src/**/*.ts",
     "tests/**/*.ts",
     "!**/*.d.ts"
   ],
   "files": [
-    "data-validation.ts",
-    "lib/IRule.ts",
-    "lib/IValidatableObject.ts",
-    "lib/Rules/NotUndefinedOrNan.ts",
-    "lib/Rules/Required.ts",
-    "lib/RulesCollection.ts",
-    "lib/Validator.ts",
+    "src/data-validation.standalone.ts",
+    "src/data-validation.ts",
+    "src/lib/IRule.ts",
+    "src/lib/IValidatableObject.ts",
+    "src/lib/Rules/NotUndefinedOrNan.ts",
+    "src/lib/Rules/Required.ts",
+    "src/lib/RulesCollection.ts",
+    "src/lib/Validator.ts",
     "tests/Rules/NotUndefinedOrNan.spec.ts",
     "tests/Rules/Required.spec.ts",
     "tests/RulesCollection.spec.ts",
