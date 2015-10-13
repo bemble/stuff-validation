@@ -32,7 +32,7 @@ describe('Validator', () => {
       expect(invalidRule).to.equal(requiredRule);
 
       invalidRule = validator.validateValue(123, 'required');
-      expect(invalidRule).not.to.be.null;
+      expect(invalidRule).to.be.null;
     });
 
     it('always add notUndefinedOrEmpty rule', () => {
