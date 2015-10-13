@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "noImplicitAny": true,
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "target": "es5",
+    "sourceMap": true
+  },
+  "filesGlob": [
+    "data-validation.ts",
+    "lib/**/*.ts",
+    "tests/**/*.ts",
+    "!**/*.d.ts"
+  ],
+  "files": [
+    "data-validation.ts",
+    "lib/IRule.ts",
+    "lib/IValidatableObject.ts",
+    "lib/Rules/NotUndefinedOrNan.ts",
+    "lib/Rules/Required.ts",
+    "lib/RulesCollection.ts",
+    "lib/Validator.ts",
+    "tests/Rules/NotUndefinedOrNan.spec.ts",
+    "tests/Rules/Required.spec.ts",
+    "tests/RulesCollection.spec.ts",
+    "tests/Validator.spec.ts"
+  ],
+  "exclude": []
+}
