@@ -4,7 +4,7 @@
   "description": "Node module that allows you to validate data according to rules.",
   "main": "dist/data-validation.js",
   "scripts": {
-    "test": "gulp typescript test",
+    "test": "gulp tsd typescript test",
     "prepublish": "gulp prepublish"
   },
   "repository": {
