@@ -1,0 +1,25 @@
+{
+  "name": "data-validation",
+  "description": "Node module that allows you to validate data according to rules.",
+  "main": "dist/data-validation.js",
+  "authors": [
+    "Pierre CLEMENT <pierre@clement.re> (http://www.pierre-clement.info)"
+  ],
+  "license": "LGPL-3.0",
+  "keywords": [
+    "validation",
+    "rules",
+    "data"
+  ],
+  "homepage": "https://github.com/pierrecle/data-validation",
+  "moduleType": [
+    "node"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
