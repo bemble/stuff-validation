@@ -3,11 +3,11 @@
 import chai = require('chai');
 var expect:any = chai.expect;
 
-import {IRule} from "../../src/lib/IRule";
+import {Rule} from "../../src/lib/Rule";
 import {Required} from "../../src/lib/Rules/Required";
 
 describe('Required', () => {
-    var rule:IRule = null;
+    var rule:Rule = null;
 
     beforeEach(() => {
         rule = new Required();

@@ -1,12 +1,12 @@
-import {IRule} from '../IRule';
+import {Rule} from '../Rule';
 
-export class NotUndefinedOrNan implements IRule {
-    /**
-     * Value is valid when not undefined or NaN.
-     * @param value Value to ckeck
-     * @returns {boolean} True if valid, false otherwise
-     */
-    isValueValid(value:any):boolean {
-        return value !== undefined && value === value;
-    }
+export class NotUndefinedOrNan extends Rule {
+  /**
+  * Value is valid when not undefined or NaN.
+  * @param value Value to ckeck
+  * @returns {boolean} True if valid, false otherwise
+  */
+  isValueValid(value:any):boolean {
+    return value !== undefined && value === value;
+  }
 }

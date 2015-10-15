@@ -3,11 +3,11 @@
 import chai = require('chai');
 var expect:any = chai.expect;
 
-import {IRule} from "../../src/lib/IRule";
+import {Rule} from "../../src/lib/Rule";
 import {NotUndefinedOrNan} from "../../src/lib/Rules/NotUndefinedOrNan";
 
 describe('NotUndefinedOrNan', () => {
-    var rule:IRule = null;
+    var rule:Rule = null;
 
     beforeEach(() => {
         rule = new NotUndefinedOrNan();

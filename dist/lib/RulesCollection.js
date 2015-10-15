@@ -5,6 +5,10 @@ var RulesCollection = (function () {
     }
     RulesCollection.init = function () {
         RulesCollection.isInited = true;
+        RulesCollection.reset();
+    };
+    RulesCollection.reset = function () {
+        RulesCollection.collection = {};
         RulesCollection.collection['notUndefinedOrNan'] = new NotUndefinedOrNan_1.NotUndefinedOrNan();
         RulesCollection.collection['required'] = new Required_1.Required();
     };
