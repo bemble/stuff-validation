@@ -1,6 +1,19 @@
 # data-validation
 Node module that allows you to validate data according to rules.
 
+## Installation
+
+* `npm install data-validation --save`
+* `bower install data-validation`
+
+## How it works ?
+
+The [module](src/data-validation.ts) exposes multiple classes: [Validator](src/lib/Validator.ts), [RulesCollection](src/lib/RulesCollection.ts), [ValidationRule](src/lib/ValidationRule.ts) and [Rule](src/lib/Rule.ts).
+
+### API
+
+#### Validator
+
 ### Default test
 The validator always check if the given value is not `undefined` or `NaN`.
 The motivation of this behavior is that `undefined` is value that should not be settable by user/developer (use `null` instead)
