@@ -9,6 +9,7 @@ gulp.task('typescript', typescriptTask);
 gulp.task('watch:tests', watchTestsTask);
 gulp.task('watch:typescript', watchTypescriptTask);
 gulp.task('watch', ['watch:typescript', 'watch:test']);
+gulp.task('build:clean', buildCleanTask);
 gulp.task('build:typescript', buildTypescriptTask);
 gulp.task('build:test', ['typescript'], buildTestTask);
 gulp.task('build:changelog', buildChangelogTask);
@@ -31,6 +32,7 @@ var conventionalChangelog = require('gulp-conventional-changelog');
 var runSequence = require('run-sequence');
 var gutil = require('gulp-util');
 var git = require('gulp-git');
+var del = require('del');
 
 
 //--------------------------------------------------
@@ -64,7 +66,7 @@ function typescriptTask() {
   .pipe(changed('.', {extension: '.js'}))
   .pipe(sourcemaps.init())
   .pipe(ts(tsProject)).js
-  .pipe(sourcemaps.write('.'))
+  .pipe(sourcemaps.write())
   .pipe(gulp.dest('./'));
 };
 
@@ -81,11 +83,19 @@ function watchTypescriptTask() {
 /*
 * Build tasks
 */
+buildCleanTask.description = "Clean build dir";
+function buildCleanTask() {
+  return del(['./dist']);
+};
+
 buildTypescriptTask.description = "Build Typescript files";
 function buildTypescriptTask() {
-  return gulp.src(['./src/**/*.ts'], {base: './src'})
-  .pipe(ts(tsProject))
-  .pipe(gulp.dest('./dist'));
+  var tsProject = ts.createProject('tsconfig.json');
+  var tsBuild = gulp.src(['./src/**/*.ts'], {base: './src'})
+  .pipe(ts(tsProject)).js;
+
+  tsBuild.js.pipe(gulp.dest('./dist'));
+  return tsBuild.dts.pipe(gulp.dest('./dist'));
 };
 
 buildTestTask.description = "Run the tests and stop when fail";
@@ -108,7 +118,7 @@ function buildChangelogTask() {
 buildTask.description = "Build the package";
 function buildTask(done) {
   runSequence(
-    'build:typescript', 'build:test', 'build:changelog',
+    'build:clean', 'build:typescript', 'build:test', 'build:changelog',
     function (error) {
       done(error ? new gutil.PluginError('build', error.message, {showStack: false}) : undefined);
     }
