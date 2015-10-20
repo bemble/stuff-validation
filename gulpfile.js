@@ -11,6 +11,7 @@ gulp.task('watch:typescript', watchTypescriptTask);
 gulp.task('watch', ['watch:typescript', 'watch:test']);
 gulp.task('build:clean', buildCleanTask);
 gulp.task('build:typescript', buildTypescriptTask);
+gulp.task('build:typescriptDeclaration', buildTypescriptDeclarationTask);
 gulp.task('build:test', ['typescript'], buildTestTask);
 gulp.task('build:changelog', buildChangelogTask);
 gulp.task('build', buildTask);
@@ -90,13 +91,16 @@ function buildCleanTask() {
 
 buildTypescriptTask.description = "Build Typescript files";
 function buildTypescriptTask() {
-  var tsProject = ts.createProject('tsconfig.json');
-  var tsBuild = gulp.src(['./src/**/*.ts'], {base: './src'})
-  .pipe(ts(tsProject)).js;
-
-  tsBuild.js.pipe(gulp.dest('./dist'));
-  return tsBuild.dts.pipe(gulp.dest('./dist'));
+  return gulp.src(['./src/**/*.ts'], {base: './src'})
+  .pipe(ts(tsProject)).js
+  .pipe(gulp.dest('./dist/'));
 };
+
+buildTypescriptDeclarationTask.description = "Build Typescript declaration file";
+function buildTypescriptDeclarationTask() {
+  return gulp.src('./src/data-validation.d.ts', {base: './src'})
+  .pipe(gulp.dest('./dist/'));
+}
 
 buildTestTask.description = "Run the tests and stop when fail";
 function buildTestTask() {
@@ -118,7 +122,7 @@ function buildChangelogTask() {
 buildTask.description = "Build the package";
 function buildTask(done) {
   runSequence(
-    'build:clean', 'build:typescript', 'build:test', 'build:changelog',
+    'build:clean', 'build:typescript', 'build:typescriptDeclaration', 'build:test', 'build:changelog',
     function (error) {
       done(error ? new gutil.PluginError('build', error.message, {showStack: false}) : undefined);
     }
