@@ -16,9 +16,9 @@ The [module](src/data-validation.ts) exposes multiple classes: [Validator](src/l
 #### Validator
 
 ### Default test
-The validator always check if the given value is not `undefined` or `NaN`.
+The validator always check if the given value is not `undefined` or `NaN`. So, the rule [DefinedAndNotNan](src/lib/DefinedAndNotNan.ts) is automatically added.
 The motivation of this behavior is that `undefined` is value that should not be settable by user/developer (use `null` instead)
-and `NaN` which is by definition an unvalid value: a number was expected and not a number was got.
+and `NaN` which is by definition an invalid value: a number was expected and not a number was got.
 
 ### Null
 If `null` is the value to test and the rules don't contain `required`, the value will be valid and no validation rule will be called.
