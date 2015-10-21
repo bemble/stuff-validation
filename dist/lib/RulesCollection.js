@@ -1,4 +1,4 @@
-var NotUndefinedOrNan_1 = require('./Rules/NotUndefinedOrNan');
+var DefinedAndNotNan_1 = require('./Rules/DefinedAndNotNan');
 var Required_1 = require('./Rules/Required');
 var RulesCollection = (function () {
     function RulesCollection() {
@@ -9,7 +9,7 @@ var RulesCollection = (function () {
     };
     RulesCollection.reset = function () {
         RulesCollection.collection = {};
-        RulesCollection.collection['notUndefinedOrNan'] = new NotUndefinedOrNan_1.NotUndefinedOrNan();
+        RulesCollection.collection['definedAndNotNan'] = new DefinedAndNotNan_1.DefinedAndNotNan();
         RulesCollection.collection['required'] = new Required_1.Required();
     };
     RulesCollection.addRule = function (ruleName, rule) {

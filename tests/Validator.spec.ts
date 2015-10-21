@@ -7,7 +7,7 @@ var expect = chai.expect;
 chai.use(sinonChai);
 
 import {FakeRule} from "./mock/FakeRule";
-import {NotUndefinedOrNan} from "../src/lib/Rules/NotUndefinedOrNan";
+import {DefinedAndNotNan} from "../src/lib/Rules/DefinedAndNotNan";
 import {ValidationRule} from "../src/lib/ValidationRule";
 import {Validator} from "../src/lib/Validator";
 import {RulesCollection} from "../src/lib/RulesCollection";
@@ -53,7 +53,7 @@ describe('Validator', () => {
 
     it('always add notUndefinedOrEmpty rule', () => {
       var invalidRule = validator.validateValue(undefined);
-      expect(invalidRule.rule instanceof NotUndefinedOrNan).to.be.true;
+      expect(invalidRule.rule instanceof DefinedAndNotNan).to.be.true;
     });
 
     it('validates multiple rules', () => {
@@ -102,7 +102,7 @@ describe('Validator', () => {
 
       sinon.spy(validator, 'validateValue');
       validator.isValueValid(undefined, [rule]);
-      expect(validator.validateValue).to.have.been.calledWith(undefined, ['notUndefinedOrNan', rule]);
+      expect(validator.validateValue).to.have.been.calledWith(undefined, ['definedAndNotNan', rule]);
     });
 
     it('returns true when value satisfy every rule', () => {

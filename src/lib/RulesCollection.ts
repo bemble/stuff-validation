@@ -1,5 +1,5 @@
 import {Rule} from './Rule';
-import {NotUndefinedOrNan} from './Rules/NotUndefinedOrNan';
+import {DefinedAndNotNan} from './Rules/DefinedAndNotNan';
 import {Required} from './Rules/Required';
 
 /**
@@ -21,7 +21,7 @@ export class RulesCollection {
    */
   public static reset () {
     RulesCollection.collection = {};
-    RulesCollection.collection['notUndefinedOrNan'] = new NotUndefinedOrNan();
+    RulesCollection.collection['definedAndNotNan'] = new DefinedAndNotNan();
     RulesCollection.collection['required'] = new Required();
   }
 

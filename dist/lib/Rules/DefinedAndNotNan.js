@@ -4,14 +4,14 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var Rule_1 = require('../Rule');
-var NotUndefinedOrNan = (function (_super) {
-    __extends(NotUndefinedOrNan, _super);
-    function NotUndefinedOrNan() {
+var DefinedAndNotNan = (function (_super) {
+    __extends(DefinedAndNotNan, _super);
+    function DefinedAndNotNan() {
         _super.apply(this, arguments);
     }
-    NotUndefinedOrNan.prototype.isValueValid = function (value) {
+    DefinedAndNotNan.prototype.isValueValid = function (value) {
         return value !== undefined && value === value;
     };
-    return NotUndefinedOrNan;
+    return DefinedAndNotNan;
 })(Rule_1.Rule);
-exports.NotUndefinedOrNan = NotUndefinedOrNan;
+exports.DefinedAndNotNan = DefinedAndNotNan;

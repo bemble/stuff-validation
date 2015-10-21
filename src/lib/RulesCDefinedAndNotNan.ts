@@ -1,6 +1,6 @@
 import {Rule} from '../Rule';
 
-export class NotUndefinedOrNan extends Rule {
+export class DefinedAndNotNan extends Rule {
   /**
   * Value is valid when not undefined or NaN.
   * @param value Value to ckeck

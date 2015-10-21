@@ -5,7 +5,7 @@ var Validator = (function () {
     }
     Validator.prototype.validateValue = function (value, rules) {
         var usedRules = rules ? rules : [];
-        usedRules.unshift('notUndefinedOrNan');
+        usedRules.unshift('definedAndNotNan');
         var isNullValid = this.isNullValid(value, usedRules);
         for (var i = 0; i < usedRules.length && !isNullValid; i++) {
             var validationRule = this.getValidationRule(usedRules[i]);

@@ -8,7 +8,7 @@ gulp.task('test', testTask);
 gulp.task('typescript', typescriptTask);
 gulp.task('watch:tests', watchTestsTask);
 gulp.task('watch:typescript', watchTypescriptTask);
-gulp.task('watch', ['watch:typescript', 'watch:test']);
+gulp.task('watch', ['watch:typescript', 'watch:tests']);
 gulp.task('build:clean', buildCleanTask);
 gulp.task('build:typescript', buildTypescriptTask);
 gulp.task('build:typescriptDeclaration', buildTypescriptDeclarationTask);

@@ -12,7 +12,7 @@ export class Validator {
   */
   validateValue(value:any, rules?:(ValidationRule|Rule|string)[]):ValidationRule {
     var usedRules = rules ? rules : [];
-    usedRules.unshift('notUndefinedOrNan');
+    usedRules.unshift('definedAndNotNan');
     var isNullValid = this.isNullValid(value, usedRules);
 
     for(var i = 0; i< usedRules.length && !isNullValid; i++) {
