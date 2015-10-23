@@ -137,4 +137,51 @@ describe("ValidationRule", () => {
       expect(rule.isValueValid).to.not.have.been.called
     });
   });
+
+  describe("asyncIsValueValid", () => {
+    it("call isValueValid and returns a success promise if validation was successfull", (done:any) => {
+      var promise:Promise<any> = Promise.resolve();
+      var rule:FakeRule = new FakeRule();
+      sinon.stub(rule, 'isValueValid', () => promise);
+      var validationRule:ValidationRule = new ValidationRule(rule, [() => 'foo']);
+
+      var ret:Promise<any> = validationRule.asyncIsValueValid(null);
+      expect(rule.isValueValid).to.have.been.calledWith(null, ['foo']);
+
+      ret.then(() => {
+        expect(true).to.be.true;
+      }).catch(() => {
+        expect(false).to.be.true;
+      }).then(done.bind(null, null), done);
+    });
+
+    it("returns an error promise with current validationRule if validation was not successfull", (done:any) => {
+      var promise:Promise<any> = Promise.reject('');
+      var rule:FakeRule = new FakeRule();
+      sinon.stub(rule, 'isValueValid', () => promise);
+      var validationRule:ValidationRule = new ValidationRule(rule);
+
+      var ret:Promise<any> = validationRule.asyncIsValueValid(null);
+      ret.then(() => {
+        expect(false).to.be.true;
+      }, (reason) => {
+        expect(reason).to.equal(validationRule);
+      }).then(done.bind(null, null), done);
+    });
+
+    it("resolve directly the promise if the validation should not be applied", (done:any) => {
+      var rule:FakeRule = new FakeRule();
+      sinon.spy(rule, 'isValueValid');
+      var validationRule:ValidationRule = new ValidationRule(rule, [], false);
+
+      var ret:Promise<any> = validationRule.asyncIsValueValid(null);
+      expect(rule.isValueValid).to.not.have.been.called;
+
+      ret.then(() => {
+        expect(true).to.be.true;
+      }, (reason) => {
+        expect(false).to.be.true;
+      }).then(done.bind(null, null), done);
+    });
+  });
 });

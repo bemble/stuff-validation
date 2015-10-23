@@ -96,6 +96,30 @@ describe('Validator', () => {
     });
   });
 
+  describe('asyncValidateValue function', () => {
+    it('returns a promise', () => {
+      var ret:any = validator.asyncValidateValue(null, []);
+      expect(ret.then).to.not.be.undefined;
+    });
+
+    it('returns an success promise if all promise are in success', (done:any) => {
+      var rule1:FakeRule = new FakeRule();
+      var rule2:FakeRule = new FakeRule();
+      var p1:Promise<any> = Promise.resolve();
+      var p2:Promise<any> = Promise.resolve();
+
+      sinon.stub(rule1, 'isValueValid', () => p1);
+      sinon.stub(rule2, 'isValueValid', () => p2);
+
+      var ret:any = validator.asyncValidateValue(null, [rule1, rule2]);
+      ret.then(() => {
+        expect(true).to.be.true;
+      },() => {
+        expect(false).to.be.true;
+      }).then(done.bind(null, null), done);
+    });
+  });
+
   describe('isValueValid function', () => {
     it('calls validateValue', () => {
       var rule:FakeRule = new FakeRule();

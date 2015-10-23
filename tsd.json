@@ -19,6 +19,9 @@
     },
     "mocha/mocha.d.ts": {
       "commit": "062f48ef51dd46520b9db3f516739d4a4e48d4bd"
+    },
+    "es6-promise/es6-promise.d.ts": {
+      "commit": "44cbde48eecd1918ed54b3be49a9752688b6c65a"
     }
   }
 }

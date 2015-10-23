@@ -1,3 +1,5 @@
+/// <reference path="../../typings/es6-promise/es6-promise.d.ts" />
+
 import {Rule} from './Rule';
 import {RulesCollection} from './RulesCollection';
 
@@ -43,10 +45,26 @@ export class ValidationRule {
 
   /**
    * Check if the value is valid according to the object's rule.
+   * The rule is supposed to be synchronous and return a boolean.
    * @param value Value to validate
    */
   isValueValid(value:any):boolean {
-    return this.shouldBeApplied() ? this.rule.isValueValid(value, this.getParametersValues()) : true;
+    return this.shouldBeApplied() ? <boolean> this.rule.isValueValid(value, this.getParametersValues()) : true;
+  }
+
+
+  /**
+   * Check if the value is valid according to the object's rule.
+   * The rule is supposed to be asynchonous and return a promise.
+   * @param value Value to validate
+   */
+  asyncIsValueValid(value:any):Promise<ValidationRule|void> {
+    if (!this.shouldBeApplied()) {
+      return new Promise<void>((resolve:Function) => {resolve();});
+    }
+
+    var validationPromise:Promise<any> = <Promise<any>> this.rule.isValueValid(value, this.getParametersValues());
+    return validationPromise.catch(() => { return Promise.reject(this); });
   }
 
   private getValueFromFunctionOrItself(rawValue:any):any {

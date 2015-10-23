@@ -24,12 +24,6 @@ and `NaN` which is by definition an invalid value: a number was expected and not
 If `null` is the value to test and the rules don't contain `required`, the value will be valid and no validation rule will be called.
 The reason is that if the value is not required, `null` is valid and there is no need to do any test on an "empty value".
 
-## Compatibility
-* `ECMAScript 5 +`
-
-## Async validation
-Because this library is here to give a quick feedback to the user about the validity of its data, handle async validation is not a priority.
-
 ## Dev notes
 
 ### How to run tests?

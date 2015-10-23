@@ -1,3 +1,5 @@
+/// <reference path="../../typings/es6-promise/es6-promise.d.ts" />
+
 import {Rule} from './Rule';
 import {IValidationConfiguration} from './IValidationConfiguration';
 import {RulesCollection} from './RulesCollection';
@@ -5,7 +7,7 @@ import {ValidationRule} from './ValidationRule';
 
 export class Validator {
   /**
-  * Validate a value according to given rules.
+  * Validate a value according to given synchronous rules.
   * @param value Value to validate
   * @param rules Rules that the value must pass
   * @returns The first rule that fail, null if object is valid.
@@ -22,6 +24,23 @@ export class Validator {
       }
     }
     return null;
+  }
+
+  /**
+  * Validate a value according to given asynchronous rules.
+  * @param value Value to validate
+  * @param rules Rules that the value must pass
+  * @returns An error promise with the first rule that fail, a success promise if object is valid.
+  * TODO: allow to set the promise library
+  */
+  asyncValidateValue(value:any, rules?:Rule[]):Promise<any> {
+    var rulesPromises:Promise<ValidationRule|void>[] = rules.map((rule:Rule) => {
+      var validationRule:ValidationRule = this.getValidationRule(rule);
+      return <Promise<ValidationRule|void>> validationRule.asyncIsValueValid(value);
+    });
+    // TODO: change return type, to delete any
+    // TODO: test multiple rules with multiple failing, only one should raise
+    return Promise.all(rulesPromises);
   }
 
   private isNullValid(value:any, rules?:(ValidationRule|Rule|string)[]):boolean {
