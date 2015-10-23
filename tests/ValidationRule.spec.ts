@@ -183,5 +183,18 @@ describe("ValidationRule", () => {
         expect(false).to.be.true;
       }).then(done.bind(null, null), done);
     });
+
+    it("accepts other Promise library", (done:any) => {
+      var bluebird = require('bluebird');
+
+      var rule:FakeRule = new FakeRule();
+      sinon.spy(rule, 'isValueValid');
+      var validationRule:ValidationRule = new ValidationRule(rule, [], false);
+
+      var ret:Promise<any> = validationRule.asyncIsValueValid(null, bluebird.Promise);
+      expect(ret instanceof bluebird.Promise).to.be.true;
+
+      ret.then(done.bind(null, null), done);
+    })
   });
 });

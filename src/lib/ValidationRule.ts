@@ -1,4 +1,5 @@
 /// <reference path="../../typings/es6-promise/es6-promise.d.ts" />
+/// <reference path="IEs6PromiseLibrary.d.ts" />
 
 import {Rule} from './Rule';
 import {RulesCollection} from './RulesCollection';
@@ -58,9 +59,10 @@ export class ValidationRule {
    * The rule is supposed to be asynchonous and return a promise.
    * @param value Value to validate
    */
-  asyncIsValueValid(value:any):Promise<ValidationRule|void> {
+  asyncIsValueValid(value:any, promiseLibrary?:IEs6PromiseLibrary):Promise<ValidationRule|void> {
+    var usedPromiseLibrary:IEs6PromiseLibrary = promiseLibrary ? promiseLibrary : Promise;
     if (!this.shouldBeApplied()) {
-      return new Promise<void>((resolve:Function) => {resolve();});
+      return new usedPromiseLibrary<void>((resolve:Function) => {resolve();});
     }
 
     var validationPromise:Promise<any> = <Promise<any>> this.rule.isValueValid(value, this.getParametersValues());

@@ -118,6 +118,48 @@ describe('Validator', () => {
         expect(false).to.be.true;
       }).then(done.bind(null, null), done);
     });
+
+    it('returns an error promise with only one failing rule', (done:any) => {
+      var rule1:FakeRule = new FakeRule();
+      var rule2:FakeRule = new FakeRule();
+      var p1:Promise<any> = Promise.reject(null);
+      var p2:Promise<any> = Promise.reject(null);
+
+      sinon.stub(rule1, 'isValueValid', () => p1);
+      sinon.stub(rule2, 'isValueValid', () => p2);
+
+      var ret:any = validator.asyncValidateValue(null, [rule1, rule2]);
+      ret.then(() => {
+        expect(true).to.be.false;
+      },(reason:ValidationRule) => {
+        expect(reason).to.not.be.undefined;
+        expect(reason instanceof ValidationRule).to.be.true;
+      }).then(done.bind(null, null), done);
+    });
+  });
+
+  describe('setPromiseLibrary', () => {
+    var bluebird:any;
+    beforeEach(() => {
+      bluebird = require('bluebird');
+    });
+
+    it('can set another promise library', (done:any) => {
+      validator.setPromiseLibrary(bluebird.Promise);
+      sinon.spy(bluebird.Promise, 'all');
+
+      var rule:FakeRule = new FakeRule();
+      var promise:Promise<any> = Promise.resolve(null);
+
+      sinon.stub(rule, 'isValueValid', () => promise);
+      var validationRule:ValidationRule = new ValidationRule(rule);
+      sinon.spy(validationRule, 'asyncIsValueValid');
+
+      var ret:any = validator.asyncValidateValue(null, [validationRule]);
+      expect(bluebird.Promise.all).to.have.been.called;
+      expect(validationRule.asyncIsValueValid).to.have.been.calledWith(null, bluebird.Promise);
+      ret.then(done.bind(null, null), done);
+    });
   });
 
   describe('isValueValid function', () => {

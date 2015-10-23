@@ -25,6 +25,7 @@ declare module dataValidation {
   }
 
   interface Validator {
+    setPromiseLibrary(newPromiseLibrary: any);
     validateValue(value: any, rules?: (ValidationRule | Rule | string)[]): ValidationRule;
     isValueValid(value: any, rules?: (ValidationRule | Rule | string)[]): boolean;
     isObjectValid(objectToValidate: any, validationConfig?: IValidationConfiguration): boolean;

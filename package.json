@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/pierrecle/data-validation#readme",
   "devDependencies": {
+    "bluebird": "^2.10.2",
     "chai": "^3.3.0",
     "del": "^2.0.2",
     "gulp": "^3.9.0",

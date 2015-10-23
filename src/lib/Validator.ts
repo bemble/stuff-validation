@@ -1,4 +1,5 @@
 /// <reference path="../../typings/es6-promise/es6-promise.d.ts" />
+/// <reference path="IEs6PromiseLibrary.d.ts" />
 
 import {Rule} from './Rule';
 import {IValidationConfiguration} from './IValidationConfiguration';
@@ -6,6 +7,17 @@ import {RulesCollection} from './RulesCollection';
 import {ValidationRule} from './ValidationRule';
 
 export class Validator {
+  private Promise:IEs6PromiseLibrary = Promise;
+
+  /**
+  * Lets you change the promise library.
+  * The library used must be an ES6 promise compliant library, with at least Promise.all (which should fail-first) and constructor ES6 compliant.
+  * @param  newPromiseLibrary The new Promise library you want to use
+  */
+  setPromiseLibrary(newPromiseLibrary:IEs6PromiseLibrary) {
+    this.Promise = newPromiseLibrary;
+  }
+
   /**
   * Validate a value according to given synchronous rules.
   * @param value Value to validate
@@ -31,16 +43,13 @@ export class Validator {
   * @param value Value to validate
   * @param rules Rules that the value must pass
   * @returns An error promise with the first rule that fail, a success promise if object is valid.
-  * TODO: allow to set the promise library
   */
-  asyncValidateValue(value:any, rules?:Rule[]):Promise<any> {
+  asyncValidateValue(value:any, rules?:Rule[]):Promise<ValidationRule|void> {
     var rulesPromises:Promise<ValidationRule|void>[] = rules.map((rule:Rule) => {
       var validationRule:ValidationRule = this.getValidationRule(rule);
-      return <Promise<ValidationRule|void>> validationRule.asyncIsValueValid(value);
+      return <Promise<ValidationRule|void>> validationRule.asyncIsValueValid(value, this.Promise);
     });
-    // TODO: change return type, to delete any
-    // TODO: test multiple rules with multiple failing, only one should raise
-    return Promise.all(rulesPromises);
+    return <Promise<any>> this.Promise.all(rulesPromises);
   }
 
   private isNullValid(value:any, rules?:(ValidationRule|Rule|string)[]):boolean {
@@ -63,6 +72,7 @@ export class Validator {
   * @param value Value to check
   * @param rules Rules that the value must pass
   * @returns {boolean} True if the value is valid, false otherwise.
+  * TODO: async
   */
   isValueValid(value:any, rules?:(ValidationRule|Rule|string)[]):boolean {
     return this.validateValue(value, rules) === null;
@@ -74,6 +84,7 @@ export class Validator {
   * @param objectToValidate Object to check
   * @param validationConfig Configuration of the validation
   * @returns True if object is valid, false otherwise.
+  * TODO: async
   */
   isObjectValid(objectToValidate:any, validationConfig?:IValidationConfiguration):boolean {
     var config:IValidationConfiguration = this.getValidationConfiguration(objectToValidate, validationConfig)
@@ -94,6 +105,7 @@ export class Validator {
   * @param groupName Name of the group
   * @param validationConfig Configuration of the validation
   * @returns True if object is valid, false otherwise.
+  * TODO: async
   */
   isGroupValid(objectToValidate:any, groupName:string, validationConfig?:IValidationConfiguration):boolean {
     var config:IValidationConfiguration = this.getValidationConfiguration(objectToValidate, validationConfig)
