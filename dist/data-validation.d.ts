@@ -25,10 +25,12 @@ declare module dataValidation {
   }
 
   interface Validator {
+    setPromiseLibrary(newPromiseLibrary: any): void;
     validateValue(value: any, rules?: (ValidationRule | Rule | string)[]): ValidationRule;
-    isValueValid(value: any, rules?: (ValidationRule | Rule | string)[]): boolean;
-    isObjectValid(objectToValidate: any, validationConfig?: IValidationConfiguration): boolean;
-    isGroupValid(objectToValidate: any, groupName: string, validationConfig?: IValidationConfiguration): boolean;
+    asyncValidateValue(value:any, rules?:(ValidationRule|Rule|string)[]): Promise<ValidationRule|void>;
+    isValueValid(value: any, rules?: (ValidationRule | Rule | string)[]): Promise<any>;
+    isObjectValid(objectToValidate: any, validationConfig?: IValidationConfiguration): Promise<any>;
+    isGroupValid(objectToValidate: any, groupName: string, validationConfig?: IValidationConfiguration): Promise<any>;
   }
 
   interface DataValidationModule {

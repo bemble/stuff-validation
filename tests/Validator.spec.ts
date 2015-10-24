@@ -102,14 +102,18 @@ describe('Validator', () => {
       expect(ret.then).to.not.be.undefined;
     });
 
-    it('returns an success promise if all promise are in success', (done:any) => {
-      var rule1:FakeRule = new FakeRule();
-      var rule2:FakeRule = new FakeRule();
-      var p1:Promise<any> = Promise.resolve();
-      var p2:Promise<any> = Promise.resolve();
+    it('returns a resovled promise if called without rules', (done:any) => {
+      var ret:any = validator.asyncValidateValue(null);
+      ret.then(() => {
+        expect(true).to.be.true;
+      },() => {
+        expect(false).to.be.true;
+      }).then(done.bind(null, null), done);
+    });
 
-      sinon.stub(rule1, 'isValueValid', () => p1);
-      sinon.stub(rule2, 'isValueValid', () => p2);
+    it('returns a resolved promise if all rules are resolved', (done:any) => {
+      var rule1:FakeRule = new FakeRule(Promise.resolve());
+      var rule2:FakeRule = new FakeRule(Promise.resolve());
 
       var ret:any = validator.asyncValidateValue(null, [rule1, rule2]);
       ret.then(() => {
@@ -119,14 +123,9 @@ describe('Validator', () => {
       }).then(done.bind(null, null), done);
     });
 
-    it('returns an error promise with only one failing rule', (done:any) => {
-      var rule1:FakeRule = new FakeRule();
-      var rule2:FakeRule = new FakeRule();
-      var p1:Promise<any> = Promise.reject(null);
-      var p2:Promise<any> = Promise.reject(null);
-
-      sinon.stub(rule1, 'isValueValid', () => p1);
-      sinon.stub(rule2, 'isValueValid', () => p2);
+    it('returns a rejected promise with only one failing rule if a rule is rejected', (done:any) => {
+      var rule1:FakeRule = new FakeRule(Promise.reject(null));
+      var rule2:FakeRule = new FakeRule(Promise.reject(null));
 
       var ret:any = validator.asyncValidateValue(null, [rule1, rule2]);
       ret.then(() => {
@@ -148,56 +147,123 @@ describe('Validator', () => {
       validator.setPromiseLibrary(bluebird.Promise);
       sinon.spy(bluebird.Promise, 'all');
 
-      var rule:FakeRule = new FakeRule();
-      var promise:Promise<any> = Promise.resolve(null);
-
-      sinon.stub(rule, 'isValueValid', () => promise);
+      var rule:FakeRule = new FakeRule(Promise.resolve(null));
       var validationRule:ValidationRule = new ValidationRule(rule);
       sinon.spy(validationRule, 'asyncIsValueValid');
 
-      var ret:any = validator.asyncValidateValue(null, [validationRule]);
-      expect(bluebird.Promise.all).to.have.been.called;
-      expect(validationRule.asyncIsValueValid).to.have.been.calledWith(null, bluebird.Promise);
-      ret.then(done.bind(null, null), done);
+      validator.asyncValidateValue(null, [validationRule]).then(() => {
+        expect(bluebird.Promise.all).to.have.been.called;
+        expect(validationRule.asyncIsValueValid).to.have.been.calledWith(null, bluebird.Promise);
+      }).then(done.bind(null, null), done);
     });
   });
 
   describe('isValueValid function', () => {
-    it('calls validateValue', () => {
-      var rule:FakeRule = new FakeRule();
+    describe('synchronous validation', () => {
+      it('calls validateValue', (done:any) => {
+        var rule:FakeRule = new FakeRule();
 
-      sinon.spy(validator, 'validateValue');
-      validator.isValueValid(undefined, [rule]);
-      expect(validator.validateValue).to.have.been.calledWith(undefined, ['definedAndNotNan', rule]);
+        sinon.spy(validator, 'validateValue');
+        validator.isValueValid(undefined, [rule]).then(() => {
+          expect(validator.validateValue).to.have.been.calledWith(undefined, ['definedAndNotNan', rule]);
+        }).then(done.bind(null, null), done);
+      });
+
+      it('returns resolved promise when value satisfy every rule', (done:any) => {
+        var rule:FakeRule = new FakeRule();
+        var rule2:FakeRule = new FakeRule();
+        var rule3:FakeRule = new FakeRule();
+
+        validator.isValueValid(123, [rule, rule2, rule3]).then(() => {
+          expect(true).to.be.true;
+        }, () => {
+          expect(true).to.be.true;
+        }).then(done.bind(null, null), done);
+      });
+
+      it('returns a rejected promise when value unsatisfy a rule', (done:any) => {
+        var rule:FakeRule = new FakeRule();
+        var rule2:FakeRule = new FakeRule(false);
+        var rule3:FakeRule = new FakeRule();
+
+        validator.isValueValid(123, [rule, rule2, rule3]).then(() => {
+          expect(true).to.be.false;
+        }, () => {
+          expect(true).to.be.true;
+        }).then(done.bind(null, null), done);
+      });
     });
 
-    it('returns true when value satisfy every rule', () => {
-      var rule:FakeRule = new FakeRule();
-      var rule2:FakeRule = new FakeRule();
-      var rule3:FakeRule = new FakeRule();
+    describe('async validation', () => {
+      it('calls asyncValidateValue', (done:any) => {
+        var rule:FakeRule = new FakeRule();
+        var asyncRule:FakeRule = new FakeRule(Promise.resolve(null));
 
-      var isValid = validator.isValueValid(123, [rule, rule2, rule3]);
-      expect(isValid).to.be.true;
+        sinon.spy(validator, 'asyncValidateValue');
+        validator.isValueValid(123, [rule], [asyncRule]).then(() => {
+          expect(validator.asyncValidateValue).to.have.been.calledWith(123, [asyncRule]);
+        }).then(done.bind(null, null), done);
+      });
 
-      sinon.stub(rule2, 'isValueValid', () => false);
+      it('returns a rejected promise if async validation was successfull', (done:any) => {
+        var rule:FakeRule = new FakeRule();
+        var asyncRule:FakeRule = new FakeRule(Promise.reject(null));
 
-      isValid = validator.isValueValid(123, [rule, rule2, rule3]);
-      expect(isValid).to.be.false;
+        sinon.spy(validator, 'asyncValidateValue');
+        validator.isValueValid(123, [rule], [asyncRule]).then(() => {
+          expect(true).to.be.false;
+        },() => {
+          expect(true).to.be.true;
+        }).then(done.bind(null, null), done);
+      });
     });
   });
 
   describe('isObjectValid function', () => {
-    it('returns true if no validationRules on the validated object', () => {
+    it('returns a resolved promise if no validationRules on the validated object', (done:any) => {
       var validatedObject:any = {
         value1: ''
       };
-      var isValid = validator.isObjectValid(validatedObject, <IValidationConfiguration>{});
-      expect(isValid).to.be.true;
+      validator.isObjectValid(validatedObject, <IValidationConfiguration>{}).then(() => {
+        expect(true).to.be.true;
+      }).then(done.bind(null, null), done);
     });
 
-    it('returns false if one of the validated object properties is not a valid value', () => {
-      var rule:FakeRule = new FakeRule();
-      sinon.stub(rule, 'isValueValid', () => false);
+    it('relies on isValueValid', (done) => {
+      var validatedObject:any = {
+        value1: '',
+      };
+      var validationConfiguration:IValidationConfiguration = {
+        rules: {
+          value1: [new FakeRule()]
+        }
+      };
+      sinon.spy(validator, 'isValueValid');
+      validator.isObjectValid(validatedObject, validationConfiguration).then(() => {
+        expect(validator.isValueValid).to.have.been.called;
+      }).then(done.bind(null, null), done);
+    });
+
+    it('calls validation once per property', (done) => {
+      var validatedObject:any = {
+        value1: '',
+      };
+      var validationConfiguration:IValidationConfiguration = {
+        rules: {
+          value1: [new FakeRule()]
+        },
+        asyncRules: {
+          value1: [new FakeRule(Promise.resolve())]
+        }
+      };
+      sinon.spy(validator, 'isValueValid');
+      validator.isObjectValid(validatedObject, validationConfiguration).then(() => {
+        expect(validator.isValueValid).to.have.been.calledOnce;
+      }).then(done.bind(null, null), done);
+    });
+
+    it('returns false if one of the validated object properties is not a valid value', (done:any) => {
+      var rule:FakeRule = new FakeRule(false);
 
       var validatedObject:any = {
         value1: ''
@@ -207,13 +273,15 @@ describe('Validator', () => {
           value1: [rule]
         }
       };
-      var isValid = validator.isObjectValid(validatedObject, validationConfiguration);
-      expect(isValid).to.be.false;
+      validator.isObjectValid(validatedObject, validationConfiguration).then(() => {
+        expect(true).to.be.false;
+      }, () => {
+        expect(true).to.be.true;
+      }).then(done.bind(null, null), done);
     });
 
-    it('validates objects recursively', () => {
-      var rule:FakeRule = new FakeRule();
-      sinon.stub(rule, 'isValueValid', () => false);
+    it('validates objects recursively', (done:any) => {
+      var rule:FakeRule = new FakeRule(false);
 
       var validationConfiguration:IValidationConfiguration = {
         rules: {
@@ -228,39 +296,53 @@ describe('Validator', () => {
           validationConfiguration: validationConfiguration
         }
       };
-      var isValid = validator.isObjectValid(validatedObject);
-      expect(isValid).to.be.false;
+      validator.isObjectValid(validatedObject).then(() => {
+        expect(false).to.be.true;
+      }, () => {
+        expect(true).to.be.true;
+      }).then(done.bind(null, null), done);
+    });
 
-      validatedObject = {
+    it('validates arrays recursively', (done) => {
+      var rule:FakeRule = new FakeRule(false);
+
+      var validationConfiguration:IValidationConfiguration = {
+        rules: {
+          value3: [rule]
+        }
+      };
+
+      var validatedObject:any = {
         value1: '',
         value2: [{
           value3: '',
           validationConfiguration: validationConfiguration
         }]
       };
-      var isValid = validator.isObjectValid(validatedObject);
-      expect(isValid).to.be.false;
+      validator.isObjectValid(validatedObject).then(() => {
+        expect(false).to.be.true;
+      }, () => {
+        expect(true).to.be.true;
+      }).then(done.bind(null, null), done);
     });
   });
 
   describe('isGroupValid function', () => {
-    it("returns true if the group is not found", () => {
+    it("returns a resolved promise if no group given", (done) => {
       var validatedObject:any = {
         value1: '',
         value2: '',
         value3: ''
       };
-      var isValid = validator.isGroupValid('groupNotFound', validatedObject, <IValidationConfiguration>{});
-      expect(isValid).to.be.true;
-
-      var validationConfiguration:IValidationConfiguration = {
-        groups: {group1: ['value1', 'value2']}
-      };
-      isValid = validator.isGroupValid(validatedObject, 'groupNotFound', validationConfiguration);
-      expect(isValid).to.be.true;
+      validator.isGroupValid(validatedObject, 'groupNotFound', <IValidationConfiguration>{}).then(() => {
+        expect(true).to.be.true;
+      }, () => {
+        expect(false).to.be.true;
+      }).then(done.bind(null, null), done);
     });
 
-    it("returns true if no validation rules", () => {
+
+    it("returns a resolved promise if the group is not found", (done:any) => {
       var validatedObject:any = {
         value1: '',
         value2: '',
@@ -269,14 +351,33 @@ describe('Validator', () => {
       var validationConfiguration:IValidationConfiguration = {
         groups: {group1: ['value1', 'value2']}
       };
-      var isValid = validator.isGroupValid(validatedObject, 'group1', validationConfiguration);
-      expect(isValid).to.be.true;
+      validator.isGroupValid(validatedObject, 'groupNotFound', validationConfiguration).then(() => {
+        expect(true).to.be.true;
+      }, () => {
+        expect(false).to.be.true;
+      }).then(done.bind(null, null), done);
     });
 
-    it("validates group given by name", () => {
-      var rule1:FakeRule = new FakeRule();
+    it("returns a resolved promise if no validation rules", (done:any) => {
+      var validatedObject:any = {
+        value1: '',
+        value2: '',
+        value3: ''
+      };
+      var validationConfiguration:IValidationConfiguration = {
+        groups: {group1: ['value1', 'value2']}
+      };
+      validator.isGroupValid(validatedObject, 'group1', validationConfiguration).then(() => {
+        expect(true).to.be.true;
+      }, () => {
+        expect(false).to.be.true;
+      }).then(done.bind(null, null), done);
+    });
+
+    it("validates group given by name", (done) => {
+      var rule1:FakeRule = new FakeRule(false);
       var rule2:FakeRule = new FakeRule();
-      sinon.stub(rule1, 'isValueValid', () => false);
+      sinon.spy(rule1, 'isValueValid');
       sinon.spy(rule2, 'isValueValid');
 
       var validatedObject:any = {
@@ -287,23 +388,19 @@ describe('Validator', () => {
         rules: {value1: [rule1], value2: [rule2]},
         groups: {group1: ['value1']}
       };
-      var isValid = validator.isGroupValid(validatedObject, 'group1', validationConfiguration);
-      expect(isValid).to.be.false;
-      expect(rule1.isValueValid).to.have.been.called;
-      expect(rule2.isValueValid).to.not.have.been.called;
-
-      validatedObject.validationConfiguration = validationConfiguration;
-      isValid = validator.isGroupValid(validatedObject, 'group1');
-      expect(isValid).to.be.false;
-      expect(rule1.isValueValid).to.have.been.called;
-      expect(rule2.isValueValid).to.not.have.been.called;
+      validator.isGroupValid(validatedObject, 'group1', validationConfiguration).then(() => {
+        expect(false).to.be.true;
+      }, () => {
+        expect(rule1.isValueValid).to.have.been.called;
+        expect(rule2.isValueValid).to.not.have.been.called;
+      }).then(done.bind(null, null), done);
     });
 
-    it('search for group recursively', () => {
+    it('search for group recursively', (done:any) => {
       var rule1:FakeRule = new FakeRule();
-      var rule2:FakeRule = new FakeRule();
+      var rule2:FakeRule = new FakeRule(false);
       sinon.spy(rule1, 'isValueValid');
-      sinon.stub(rule2, 'isValueValid', () => false);
+      sinon.spy(rule2, 'isValueValid');
 
       var validatedObject:any = {
         value1: '',
@@ -318,17 +415,19 @@ describe('Validator', () => {
           rules: {value1: [rule1]}
         }
       };
-      var isValid = validator.isGroupValid(validatedObject, 'group2');
-      expect(isValid).to.be.false;
-      expect(rule1.isValueValid).to.not.have.been.called;
-      expect(rule2.isValueValid).to.have.been.called;
+      validator.isGroupValid(validatedObject, 'group2').then(() => {
+        expect(false).to.be.true;
+      }, () => {
+        expect(rule1.isValueValid).to.not.have.been.called;
+        expect(rule2.isValueValid).to.have.been.called;
+      }).then(done.bind(null, null), done);
     });
 
-    it('validates group at different depth of the object', () => {
-      var rule1:FakeRule = new FakeRule();
-      var rule2:FakeRule = new FakeRule();
-      var stubRule1 = sinon.stub(rule1, 'isValueValid').returns(false);
-      sinon.stub(rule2, 'isValueValid').returns(false);
+    it('validates group at different depth of the object', (done:any) => {
+      var rule1:FakeRule = new FakeRule(false);
+      var rule2:FakeRule = new FakeRule(false);
+      sinon.spy(rule1, 'isValueValid');
+      sinon.spy(rule2, 'isValueValid');
 
       var validatedObject:any = {
         value1: '',
@@ -344,16 +443,12 @@ describe('Validator', () => {
           }
         }
       };
-      var isValid = validator.isGroupValid(validatedObject, 'group1');
-      expect(isValid).to.be.false;
-      expect(rule1.isValueValid).to.have.been.called;
-      expect(rule2.isValueValid).to.not.have.been.called;
-
-      stubRule1.returns(true);
-
-      isValid = validator.isGroupValid(validatedObject, 'group1');
-      expect(isValid).to.be.false;
-      expect(rule2.isValueValid).to.have.been.called;
+      var isValid = validator.isGroupValid(validatedObject, 'group1').then(() => {
+        expect(false).to.be.true;
+      }, () => {
+        expect(rule1.isValueValid).to.have.been.called;
+        expect(rule2.isValueValid).to.have.been.called;
+      }).then(done.bind(null, null), done);
     });
   });
 });

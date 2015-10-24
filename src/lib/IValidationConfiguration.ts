@@ -7,4 +7,5 @@ import {ValidationRule} from './ValidationRule';
 export interface IValidationConfiguration {
     groups?:{[name:string]: string[]};
     rules?:{[propertyName:string]: (ValidationRule|Rule|string)[]};
+    asyncRules?:{[propertyName:string]: (ValidationRule|Rule|string)[]};
 }

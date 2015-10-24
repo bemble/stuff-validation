@@ -38,13 +38,13 @@ describe("ValidationRule", () => {
 
   describe("getParametersValues function", () => {
     it("gives undefined if no parameters", () => {
-      var rule:FakeRule = {isValueValid:() => true};
+      var rule:FakeRule = new FakeRule();
       var validationRule:ValidationRule = new ValidationRule(rule);
       var parametersValues = validationRule.getParametersValues();
       expect(parametersValues).to.be.undefined;
     });
     it("returns the values of the parameters", () => {
-      var rule:FakeRule = {isValueValid:() => true};
+      var rule:FakeRule = new FakeRule();
       var validationRule:ValidationRule = new ValidationRule(rule, 1);
       var parametersValues = validationRule.getParametersValues();
       expect(parametersValues).to.equal(1);
@@ -58,7 +58,7 @@ describe("ValidationRule", () => {
       expect(parametersValues).to.eql({a: 'b'});
     });
     it('accepts function as parameters', () => {
-      var rule:FakeRule = {isValueValid:() => true};
+      var rule:FakeRule = new FakeRule();
 
       var validationRule:ValidationRule = new ValidationRule(rule, () => 'foo');
       var parametersValues = validationRule.getParametersValues();
@@ -140,29 +140,22 @@ describe("ValidationRule", () => {
 
   describe("asyncIsValueValid", () => {
     it("call isValueValid and returns a success promise if validation was successfull", (done:any) => {
-      var promise:Promise<any> = Promise.resolve();
-      var rule:FakeRule = new FakeRule();
-      sinon.stub(rule, 'isValueValid', () => promise);
+      var rule:FakeRule = new FakeRule(Promise.resolve());
+      sinon.spy(rule, 'isValueValid');
       var validationRule:ValidationRule = new ValidationRule(rule, [() => 'foo']);
 
-      var ret:Promise<any> = validationRule.asyncIsValueValid(null);
-      expect(rule.isValueValid).to.have.been.calledWith(null, ['foo']);
-
-      ret.then(() => {
-        expect(true).to.be.true;
+      validationRule.asyncIsValueValid(null).then(() => {
+        expect(rule.isValueValid).to.have.been.calledWith(null, ['foo']);
       }).catch(() => {
         expect(false).to.be.true;
       }).then(done.bind(null, null), done);
     });
 
     it("returns an error promise with current validationRule if validation was not successfull", (done:any) => {
-      var promise:Promise<any> = Promise.reject('');
-      var rule:FakeRule = new FakeRule();
-      sinon.stub(rule, 'isValueValid', () => promise);
+      var rule:FakeRule = new FakeRule(Promise.reject());
       var validationRule:ValidationRule = new ValidationRule(rule);
 
-      var ret:Promise<any> = validationRule.asyncIsValueValid(null);
-      ret.then(() => {
+      validationRule.asyncIsValueValid(null).then(() => {
         expect(false).to.be.true;
       }, (reason) => {
         expect(reason).to.equal(validationRule);
@@ -174,11 +167,8 @@ describe("ValidationRule", () => {
       sinon.spy(rule, 'isValueValid');
       var validationRule:ValidationRule = new ValidationRule(rule, [], false);
 
-      var ret:Promise<any> = validationRule.asyncIsValueValid(null);
-      expect(rule.isValueValid).to.not.have.been.called;
-
-      ret.then(() => {
-        expect(true).to.be.true;
+      validationRule.asyncIsValueValid(null).then(() => {
+        expect(rule.isValueValid).to.not.have.been.called;
       }, (reason) => {
         expect(false).to.be.true;
       }).then(done.bind(null, null), done);
