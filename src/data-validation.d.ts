@@ -44,6 +44,7 @@ declare module dataValidation {
     RulesCollection: {
       reset(): void;
       addRule(ruleName: string, rule: Rule): void;
+      setRule(ruleName:string, rule:Rule): void;
       getRule(ruleName: string): Rule;
     };
     IValidationConfiguration:{

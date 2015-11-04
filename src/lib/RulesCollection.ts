@@ -40,9 +40,20 @@ export class RulesCollection {
   }
 
   /**
+   * Set a rule into the collection.
+   * Should be used in special cases such as rule localization.
+   * @param ruleName Name of the rule
+   * @param rule Rule to add
+   */
+  static setRule(ruleName:string, rule:Rule) {
+    !RulesCollection.isInited && RulesCollection.init();
+    RulesCollection.collection[ruleName] = rule;
+  }
+
+  /**
   * Get a validation rule by its name.
   * @param ruleName Name of the rule
-  * @returns {IRule}
+  * @returns
   */
   static getRule(ruleName:string):Rule {
     !RulesCollection.isInited && RulesCollection.init();

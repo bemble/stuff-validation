@@ -8,7 +8,7 @@ import {RulesCollection} from './RulesCollection';
 * Rules used by the validator.
 */
 export class ValidationRule {
-  public rule:Rule;
+  rule:Rule;
 
   /**
   * @param rawRule Rule that will be applied by the validator
@@ -31,7 +31,7 @@ export class ValidationRule {
   }
 
   /**
-  * Interprets and return the value of the parameters.
+  * Interprets and returns the value of the parameters.
   * @return The interpreted values of the parameters.
   */
   getParametersValues():any[]|any {

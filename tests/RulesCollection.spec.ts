@@ -1,6 +1,7 @@
 /// <reference path="../typings/tsd.d.ts" />
 
 import chai = require('chai');
+import {FakeRule} from "./mock/FakeRule";
 var expect:any = chai.expect;
 
 import {Rule} from "../src/lib/Rule";
@@ -36,6 +37,13 @@ describe('RulesCollection', () => {
     catch(e) {
       expect(e).to.not.be.undefined;
     }
+  });
+
+  it('can set a rule', () => {
+    var rule:Rule = new FakeRule();
+    RulesCollection.setRule('required', rule);
+    var requiredRule = RulesCollection.getRule('required');
+    expect(requiredRule).to.equal(rule);
   });
 
   it('contains notUndefinedOrNan rule', () => {
