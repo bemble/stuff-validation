@@ -7,9 +7,6 @@ declare module dataValidation {
   }
 
   interface IValidationConfiguration {
-    groups?: {
-      [name: string]: string[];
-    };
     rules?: {
       [propertyName: string]: (ValidationRule | Rule | string)[];
     };
@@ -30,7 +27,6 @@ declare module dataValidation {
     asyncValidateValue(value:any, rules?:(ValidationRule|Rule|string)[]): Promise<ValidationRule|void>;
     isValueValid(value: any, rules?: (ValidationRule | Rule | string)[]): Promise<any>;
     isObjectValid(objectToValidate: any, validationConfig?: IValidationConfiguration): Promise<any>;
-    isGroupValid(objectToValidate: any, groupName: string, validationConfig?: IValidationConfiguration): Promise<any>;
   }
 
   interface DataValidationModule {
@@ -42,7 +38,7 @@ declare module dataValidation {
       prototype: Validator;
     };
     ValidationRule: {
-      new (rawRule: Rule | string, parameters?: any[] | any, applyCondition?: any): ValidationRule;
+      new (rawRule: Rule | string, parameters?: any[] | any, applyCondition?: Function|any): ValidationRule;
       prototype: ValidationRule;
     };
     RulesCollection: {

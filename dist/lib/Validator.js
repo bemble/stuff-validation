@@ -14,7 +14,7 @@ var Validator = (function () {
         usedRules.unshift('definedAndNotNan');
         var isNullValid = this.isNullValid(value, usedRules);
         for (var i = 0; i < usedRules.length && !isNullValid; i++) {
-            var validationRule = this.getValidationRule(usedRules[i]);
+            var validationRule = Validator.getValidationRule(usedRules[i]);
             if (!validationRule.isValueValid(value)) {
                 return validationRule;
             }
@@ -25,7 +25,7 @@ var Validator = (function () {
         var _this = this;
         var usedRules = rules ? rules : [];
         var promises = usedRules.map(function (rule) {
-            var validationRule = _this.getValidationRule(rule);
+            var validationRule = Validator.getValidationRule(rule);
             return validationRule.asyncIsValueValid(value, _this.Promise);
         });
         return this.Promise.all(promises);
@@ -42,25 +42,20 @@ var Validator = (function () {
         var promises = this.getObjectValidationPromise(objectToValidate, validationConfig).concat(this.getSubObjectsValidationPromises(objectToValidate));
         return this.Promise.all(promises);
     };
-    Validator.prototype.isGroupValid = function (objectToValidate, groupName, validationConfig) {
-        var promises = this.getGroupValidationPromise(objectToValidate, groupName, validationConfig).concat(this.getSubGroupValidationPromises(objectToValidate, groupName));
-        return this.Promise.all(promises);
-    };
     Validator.prototype.isNullValid = function (value, rules) {
-        var _this = this;
         if (value !== null) {
             return false;
         }
         return !rules.some(function (rule) {
-            var validationRule = _this.getValidationRule(rule);
+            var validationRule = Validator.getValidationRule(rule);
             return validationRule.rule === RulesCollection_1.RulesCollection.getRule('required');
         });
     };
-    Validator.prototype.getValidationRule = function (rawRule) {
+    Validator.getValidationRule = function (rawRule) {
         return rawRule instanceof ValidationRule_1.ValidationRule ? rawRule : new ValidationRule_1.ValidationRule(rawRule);
     };
     Validator.prototype.getObjectValidationPromise = function (objectToValidate, validationConfig) {
-        var config = this.getValidationConfiguration(objectToValidate, validationConfig) || {};
+        var config = Validator.getValidationConfiguration(objectToValidate, validationConfig) || {};
         var propertiesWithValidation = (config.rules ? Object.keys(config.rules) : []).concat(config.asyncRules ? Object.keys(config.asyncRules) : []);
         propertiesWithValidation = propertiesWithValidation.filter(function (value, index, currentArray) {
             return currentArray.indexOf(value) === index;
@@ -73,17 +68,6 @@ var Validator = (function () {
             return _this.isObjectValid(objectToValidate[propertyName]);
         });
     };
-    Validator.prototype.getGroupValidationPromise = function (objectToValidate, groupName, validationConfig) {
-        var config = this.getValidationConfiguration(objectToValidate, validationConfig) || {};
-        var groupProperties = (config.groups && config.groups[groupName] ? config.groups[groupName] : []);
-        return this.getPropertiesValidationPromise(groupProperties, objectToValidate, config);
-    };
-    Validator.prototype.getSubGroupValidationPromises = function (objectToValidate, groupName) {
-        var _this = this;
-        return this.getObjectProperties(objectToValidate).map(function (propertyName) {
-            return _this.isGroupValid(objectToValidate[propertyName], groupName);
-        });
-    };
     Validator.prototype.getPropertiesValidationPromise = function (propertiesName, objectToValidate, config) {
         var _this = this;
         return propertiesName.map(function (propertyName) {
@@ -92,7 +76,7 @@ var Validator = (function () {
             return _this.isValueValid(objectToValidate[propertyName], rules, asyncRules);
         });
     };
-    Validator.prototype.getValidationConfiguration = function (objectToValidate, validationConfig) {
+    Validator.getValidationConfiguration = function (objectToValidate, validationConfig) {
         return validationConfig || (typeof objectToValidate === "object" && objectToValidate.validationConfiguration);
     };
     Validator.prototype.getObjectProperties = function (object) {

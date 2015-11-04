@@ -29,8 +29,8 @@ export class Validator {
     usedRules.unshift('definedAndNotNan');
     var isNullValid = this.isNullValid(value, usedRules);
 
-    for(var i = 0; i< usedRules.length && !isNullValid; i++) {
-      var validationRule:ValidationRule = this.getValidationRule(usedRules[i]);
+    for(var i = 0; i < usedRules.length && !isNullValid; i++) {
+      var validationRule:ValidationRule = Validator.getValidationRule(usedRules[i]);
       if(!validationRule.isValueValid(value)) {
         return validationRule;
       }
@@ -47,7 +47,7 @@ export class Validator {
   asyncValidateValue(value:any, rules?:(ValidationRule|Rule|string)[]):Promise<ValidationRule|void> {
     var usedRules = rules ? rules : [];
     var promises:Promise<ValidationRule|void>[] = usedRules.map((rule:Rule) => {
-      var validationRule:ValidationRule = this.getValidationRule(rule);
+      var validationRule:ValidationRule = Validator.getValidationRule(rule);
       return <Promise<ValidationRule|void>> validationRule.asyncIsValueValid(value, this.Promise);
     });
     return <Promise<any>> this.Promise.all(promises);
@@ -80,38 +80,24 @@ export class Validator {
     return this.Promise.all(promises);
   }
 
-  /**
-  * Check if the group properties fulfills their validation rules.
-  * Stops at first fail.
-  * Validation groups property name must be "validationGroups".
-  * @param objectToValidate Object to check
-  * @param groupName Name of the group
-  * @param validationConfig Configuration of the validation
-  * @returns Resolved promise if the group is valid, rejected promise otherwise.
-  */
-  isGroupValid(objectToValidate:any, groupName:string, validationConfig?:IValidationConfiguration):Promise<any> {
-    var promises:Promise<any>[] = this.getGroupValidationPromise(objectToValidate, groupName, validationConfig).concat(this.getSubGroupValidationPromises(objectToValidate, groupName));
-    return this.Promise.all(promises);
-  }
-
   private isNullValid(value:any, rules?:(ValidationRule|Rule|string)[]):boolean {
     if(value !== null) {
       return false;
     }
 
     return !rules.some((rule:ValidationRule|Rule|string) => {
-      var validationRule:ValidationRule = this.getValidationRule(rule);
+      var validationRule:ValidationRule = Validator.getValidationRule(rule);
       return validationRule.rule === RulesCollection.getRule('required');
     });
   }
 
-  private getValidationRule(rawRule:ValidationRule|Rule|string):ValidationRule {
+  private static getValidationRule(rawRule:ValidationRule|Rule|string):ValidationRule {
     return rawRule instanceof ValidationRule ? rawRule : new ValidationRule(rawRule);
   }
 
   private getObjectValidationPromise(objectToValidate:any, validationConfig?:IValidationConfiguration):Promise<any>[] {
-    var config:IValidationConfiguration = this.getValidationConfiguration(objectToValidate, validationConfig) || {};
-    var propertiesWithValidation:string[] = (config.rules ? Object.keys(config.rules) : []).concat(config.asyncRules ? Object.keys(config.asyncRules) : []);
+    var config:IValidationConfiguration = Validator.getValidationConfiguration(objectToValidate, validationConfig) || {};
+    var propertiesWithValidation:string[] = (<Array<string>>(config.rules ? Object.keys(config.rules) : [])).concat(config.asyncRules ? Object.keys(config.asyncRules) : []);
 
     // Delete doubles
     propertiesWithValidation = propertiesWithValidation.filter((value, index, currentArray) => {
@@ -126,18 +112,6 @@ export class Validator {
     });
   }
 
-  private getGroupValidationPromise(objectToValidate:any, groupName:string, validationConfig?:IValidationConfiguration):Promise<any>[] {
-    var config:IValidationConfiguration = this.getValidationConfiguration(objectToValidate, validationConfig) || {};
-    var groupProperties:string[] = (config.groups && config.groups[groupName] ? config.groups[groupName] : []);
-    return this.getPropertiesValidationPromise(groupProperties, objectToValidate, config);
-  }
-
-  private getSubGroupValidationPromises(objectToValidate:any, groupName:string):Promise<any>[] {
-    return this.getObjectProperties(objectToValidate).map((propertyName:string) => {
-      return this.isGroupValid(objectToValidate[propertyName], groupName);
-    });
-  }
-
   private getPropertiesValidationPromise(propertiesName:string[], objectToValidate:any, config?:IValidationConfiguration):Promise<any>[] {
     return propertiesName.map((propertyName) => {
       var rules = config && config.rules && config.rules[propertyName];
@@ -146,7 +120,7 @@ export class Validator {
     });
   }
 
-  private getValidationConfiguration(objectToValidate:any, validationConfig?:IValidationConfiguration):IValidationConfiguration {
+  private static getValidationConfiguration(objectToValidate:any, validationConfig?:IValidationConfiguration):IValidationConfiguration {
     return validationConfig || (typeof objectToValidate === "object" && objectToValidate.validationConfiguration);
   }
 
