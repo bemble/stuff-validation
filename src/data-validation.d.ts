@@ -1,6 +1,7 @@
 declare module dataValidation {
   interface Rule {
-    isValueValid(value: any, parameters?: any): boolean;
+    isValueValid(value:any, parameters?:any): boolean;
+    getErrorMessage(parameters?:any): string;
   }
 
   interface RulesCollection {
@@ -16,17 +17,18 @@ declare module dataValidation {
     parameters: any[] | any;
     applyCondition: any;
     rule: Rule;
-    shouldBeApplied(): boolean;
+    shouldBeApplied():boolean;
     getParametersValues(): any[] | any;
-    isValueValid(value: any): boolean;
+    isValueValid(value:any): boolean;
+    getErrorMessage():string;
   }
 
   interface Validator {
-    setPromiseLibrary(newPromiseLibrary: any): void;
-    validateValue(value: any, rules?: (ValidationRule | Rule | string)[]): ValidationRule;
+    setPromiseLibrary(newPromiseLibrary:any): void;
+    validateValue(value:any, rules?:(ValidationRule | Rule | string)[]): ValidationRule;
     asyncValidateValue(value:any, rules?:(ValidationRule|Rule|string)[]): Promise<ValidationRule|void>;
-    isValueValid(value: any, rules?: (ValidationRule | Rule | string)[]): Promise<any>;
-    isObjectValid(objectToValidate: any, validationConfig?: IValidationConfiguration): Promise<any>;
+    isValueValid(value:any, rules?:(ValidationRule | Rule | string)[]): Promise<any>;
+    isObjectValid(objectToValidate:any, validationConfig?:IValidationConfiguration): Promise<any>;
   }
 
   interface DataValidationModule {
@@ -38,14 +40,14 @@ declare module dataValidation {
       prototype: Validator;
     };
     ValidationRule: {
-      new (rawRule: Rule | string, parameters?: any[] | any, applyCondition?: Function|any): ValidationRule;
+      new (rawRule:Rule | string, parameters?:any[] | any, applyCondition?:Function|any): ValidationRule;
       prototype: ValidationRule;
     };
     RulesCollection: {
       reset(): void;
-      addRule(ruleName: string, rule: Rule): void;
+      addRule(ruleName:string, rule:Rule): void;
       setRule(ruleName:string, rule:Rule): void;
-      getRule(ruleName: string): Rule;
+      getRule(ruleName:string): Rule;
     };
     IValidationConfiguration:{
       prototype: IValidationConfiguration;

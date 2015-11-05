@@ -16,6 +16,9 @@ var Required = (function (_super) {
         var testedValue = (typeof value === 'object') ? Object.keys(value).toString() : ('' + value);
         return testedValue.length > 0;
     };
+    Required.prototype.getErrorMessage = function () {
+        return "This value is mandatory.";
+    };
     return Required;
 })(Rule_1.Rule);
 exports.Required = Required;

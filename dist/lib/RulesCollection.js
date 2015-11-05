@@ -19,6 +19,10 @@ var RulesCollection = (function () {
         }
         RulesCollection.collection[ruleName] = rule;
     };
+    RulesCollection.setRule = function (ruleName, rule) {
+        !RulesCollection.isInited && RulesCollection.init();
+        RulesCollection.collection[ruleName] = rule;
+    };
     RulesCollection.getRule = function (ruleName) {
         !RulesCollection.isInited && RulesCollection.init();
         return RulesCollection.collection[ruleName];

@@ -152,7 +152,7 @@ describe("ValidationRule", () => {
     });
 
     it("returns an error promise with current validationRule if validation was not successfull", (done:any) => {
-      var rule:FakeRule = new FakeRule(Promise.reject());
+      var rule:FakeRule = new FakeRule(Promise.reject(true));
       var validationRule:ValidationRule = new ValidationRule(rule);
 
       validationRule.asyncIsValueValid(null).then(() => {
@@ -187,4 +187,13 @@ describe("ValidationRule", () => {
       ret.then(done.bind(null, null), done);
     })
   });
+
+  describe("getErrorMessage", () => {
+    it("call rule.getErrorMessage with its parameters", () => {
+      var rule:FakeRule = new FakeRule();
+      sinon.spy(rule, 'getErrorMessage');
+      (new ValidationRule(rule, {foo: 'bar'})).getErrorMessage();
+      expect(rule.getErrorMessage).to.have.been.calledWith({foo: 'bar'});
+    });
+  })
 });

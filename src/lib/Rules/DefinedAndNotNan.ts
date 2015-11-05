@@ -9,4 +9,8 @@ export class DefinedAndNotNan extends Rule {
   isValueValid(value:any):boolean {
     return value !== undefined && value === value;
   }
+
+  getErrorMessage():string {
+    return "The entered value is invalid."
+  }
 }

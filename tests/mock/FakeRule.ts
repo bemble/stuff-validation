@@ -8,4 +8,8 @@ export class FakeRule extends Rule {
   isValueValid(value:any):Promise<any>|boolean{
     return this.isValid !== undefined ? this.isValid : true;
   }
+
+  getErrorMessage():string {
+    return "Wrong value.";
+  }
 }

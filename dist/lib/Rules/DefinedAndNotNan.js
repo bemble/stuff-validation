@@ -12,6 +12,9 @@ var DefinedAndNotNan = (function (_super) {
     DefinedAndNotNan.prototype.isValueValid = function (value) {
         return value !== undefined && value === value;
     };
+    DefinedAndNotNan.prototype.getErrorMessage = function () {
+        return "The entered value is invalid.";
+    };
     return DefinedAndNotNan;
 })(Rule_1.Rule);
 exports.DefinedAndNotNan = DefinedAndNotNan;

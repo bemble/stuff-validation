@@ -32,16 +32,23 @@ var ValidationRule = (function () {
         var _this = this;
         var usedPromiseLibrary = promiseLibrary ? promiseLibrary : Promise;
         if (!this.shouldBeApplied()) {
-            return new usedPromiseLibrary(function (resolve) { resolve(); });
+            return new usedPromiseLibrary(function (resolve) {
+                resolve();
+            });
         }
         var validationPromise = this.rule.isValueValid(value, this.getParametersValues());
-        return validationPromise.catch(function () { return Promise.reject(_this); });
+        return validationPromise.catch(function () {
+            return Promise.reject(_this);
+        });
     };
     ValidationRule.getValueFromFunctionOrItself = function (rawValue) {
         if (typeof rawValue === 'function') {
             return rawValue();
         }
         return rawValue;
+    };
+    ValidationRule.prototype.getErrorMessage = function () {
+        return this.rule.getErrorMessage(this.parameters);
     };
     return ValidationRule;
 })();
