@@ -1,6 +1,8 @@
 import {Rule} from './Rule';
 import {DefinedAndNotNan} from './Rules/DefinedAndNotNan';
 import {Required} from './Rules/Required';
+import {GreaterThan} from './Rules/GreaterThan';
+import {LowerThan} from './Rules/LowerThan';
 
 /**
 * Collection of rules, to get them by a string and reduce the number of instance of rules.
@@ -23,6 +25,8 @@ export class RulesCollection {
     RulesCollection.collection = {};
     RulesCollection.collection['definedAndNotNan'] = new DefinedAndNotNan();
     RulesCollection.collection['required'] = new Required();
+    RulesCollection.collection['greaterThan'] = new GreaterThan();
+    RulesCollection.collection['lowerThan'] = new LowerThan();
   }
 
   /**

@@ -1,5 +1,7 @@
 var DefinedAndNotNan_1 = require('./Rules/DefinedAndNotNan');
 var Required_1 = require('./Rules/Required');
+var GreaterThan_1 = require('./Rules/GreaterThan');
+var LowerThan_1 = require('./Rules/LowerThan');
 var RulesCollection = (function () {
     function RulesCollection() {
     }
@@ -11,6 +13,8 @@ var RulesCollection = (function () {
         RulesCollection.collection = {};
         RulesCollection.collection['definedAndNotNan'] = new DefinedAndNotNan_1.DefinedAndNotNan();
         RulesCollection.collection['required'] = new Required_1.Required();
+        RulesCollection.collection['greaterThan'] = new GreaterThan_1.GreaterThan();
+        RulesCollection.collection['lowerThan'] = new LowerThan_1.LowerThan();
     };
     RulesCollection.addRule = function (ruleName, rule) {
         !RulesCollection.isInited && RulesCollection.init();

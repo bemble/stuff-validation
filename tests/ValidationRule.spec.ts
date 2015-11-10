@@ -194,6 +194,9 @@ describe("ValidationRule", () => {
       sinon.spy(rule, 'getErrorMessage');
       (new ValidationRule(rule, {foo: 'bar'})).getErrorMessage();
       expect(rule.getErrorMessage).to.have.been.calledWith({foo: 'bar'});
+
+      (new ValidationRule(rule, {foo: () => 'bar'})).getErrorMessage();
+      expect(rule.getErrorMessage).to.have.been.calledWith({foo: 'bar'});
     });
   })
 });
