@@ -3,7 +3,7 @@ import {Rule} from '../Rule';
 export class Required extends Rule {
   /**
   * Value is valid when not null, undefined, empty object, empty string, empty array or NaN.
-  * @param value Value to ckeck
+  * @param value Value to check
   * @returns {boolean} True if valid, false otherwise
   */
   isValueValid(value:any):boolean {

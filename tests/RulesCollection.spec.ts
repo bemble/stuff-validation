@@ -46,13 +46,17 @@ describe('RulesCollection', () => {
     expect(requiredRule).to.equal(rule);
   });
 
-  it('contains notUndefinedOrNan rule', () => {
-    var rule = RulesCollection.getRule('notUndefinedOrNan');
-    expect(rule);
-  });
+  describe('registred rules', () => {
+    function itRule(ruleName:string) {
+      it('contains ' + ruleName + ' rule', () => {
+        var rule:Rule = RulesCollection.getRule(ruleName);
+        expect(rule).to.not.be.undefined;
+      });
+    }
 
-  it('contains required rule', () => {
-    var rule = RulesCollection.getRule('required');
-    expect(rule).to.not.be.undefined;
+    itRule('definedAndNotNan');
+    itRule('required');
+    itRule('greaterThan');
+    itRule('lowerThan');
   });
 });
