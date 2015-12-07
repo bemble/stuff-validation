@@ -5,7 +5,7 @@ import {FakeRule} from "./mock/FakeRule";
 var expect:any = chai.expect;
 
 import {Rule} from "../src/lib/Rule";
-import {RulesCollection} from "../src/lib/RulesCollection";
+import {RulesCollection} from "../src/lib/RulesCollection"; 
 
 describe('RulesCollection', () => {
   beforeEach(() => {
@@ -13,14 +13,14 @@ describe('RulesCollection', () => {
   });
 
   it('add a rule', () => {
-    var rule:Rule = {isValueValid: () => true};
+    var rule:Rule = new FakeRule(true);
     RulesCollection.addRule('foobar', rule);
     var ruleGet = RulesCollection.getRule('foobar');
     expect(ruleGet).to.equal(rule);
   });
 
   it("reset the collection", () => {
-    var rule:Rule = {isValueValid: () => true};
+    var rule:Rule = new FakeRule(true);
     RulesCollection.addRule('foobar', rule);
     RulesCollection.reset();
     var ruleGet = RulesCollection.getRule('foobar');
@@ -29,7 +29,7 @@ describe('RulesCollection', () => {
 
   it('cannot add rules with the same name', () => {
     try {
-      var rule:Rule = {isValueValid: () => true};
+      var rule:Rule = new FakeRule(true);
       RulesCollection.addRule('foobar', rule);
       RulesCollection.addRule('foobar', rule);
       expect(undefined).to.not.be.undefined;
