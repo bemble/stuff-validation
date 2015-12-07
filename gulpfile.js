@@ -5,7 +5,8 @@ var gulp = require('gulp');
 //--------------------------------------------------
 gulp.task('tsd', tsdTask);
 gulp.task('test', testTask);
-gulp.task('typescript', typescriptTask);
+gulp.task('tsconfigGlob', tsconfigGlobTask);
+gulp.task('typescript', ['tsconfigGlob'], typescriptTask);
 gulp.task('watch:tests', watchTestsTask);
 gulp.task('watch:typescript', watchTypescriptTask);
 gulp.task('watch', ['watch:typescript', 'watch:tests']);
@@ -28,12 +29,12 @@ var tsd = require('gulp-tsd');
 var mocha = require('gulp-mocha');
 var changed = require('gulp-changed');
 var ts = require('gulp-typescript');
-var sourcemaps = require('gulp-sourcemaps');
 var conventionalChangelog = require('gulp-conventional-changelog');
 var runSequence = require('run-sequence');
 var gutil = require('gulp-util');
 var git = require('gulp-git');
 var del = require('del');
+var tsConfig = require("tsconfig-glob");
 
 
 //--------------------------------------------------
@@ -52,11 +53,20 @@ testTask.description = "Run unit tests";
 function testTask(done) {
   require('source-map-support').install();
   return gulp.src('tests/**/*.spec.js')
-  .pipe(mocha({
-    reporter: 'dot'
-  }))
-  .on('error', function() {
-    done();
+    .pipe(mocha({
+      reporter: 'dot'
+    }))
+    .on('error', function() {
+      done();
+    });
+};
+
+tsconfigGlobTask.description = "Generate files entry in tsconfig";
+function tsconfigGlobTask() {
+  return tsConfig({
+    configPath: ".",
+    cwd: process.cwd(),
+    indent: 2
   });
 };
 
@@ -64,11 +74,9 @@ typescriptTask.description = "Transpile Typescript files";
 var tsProject = ts.createProject('tsconfig.json');
 function typescriptTask() {
   return tsProject.src()
-  .pipe(changed('.', {extension: '.js'}))
-  .pipe(sourcemaps.init())
-  .pipe(ts(tsProject)).js
-  .pipe(sourcemaps.write())
-  .pipe(gulp.dest('./'));
+    .pipe(changed('.', {extension: '.js'}))
+    .pipe(ts(tsProject)).js
+    .pipe(gulp.dest('./'));
 };
 
 watchTestsTask.description = "Run tests everytime a JS file change";
@@ -82,8 +90,8 @@ function watchTypescriptTask() {
 };
 
 /*
-* Build tasks
-*/
+ * Build tasks
+ */
 buildCleanTask.description = "Clean build dir";
 function buildCleanTask() {
   return del(['./dist']);
@@ -92,31 +100,31 @@ function buildCleanTask() {
 buildTypescriptTask.description = "Build Typescript files";
 function buildTypescriptTask() {
   return gulp.src(['./src/**/*.ts'], {base: './src'})
-  .pipe(ts(tsProject)).js
-  .pipe(gulp.dest('./dist/'));
+    .pipe(ts(tsProject)).js
+    .pipe(gulp.dest('./dist/'));
 };
 
 buildTypescriptDeclarationTask.description = "Build Typescript declaration file";
 function buildTypescriptDeclarationTask() {
   return gulp.src('./src/data-validation.d.ts', {base: './src'})
-  .pipe(gulp.dest('./dist/'));
+    .pipe(gulp.dest('./dist/'));
 }
 
 buildTestTask.description = "Run the tests and stop when fail";
 function buildTestTask() {
   return gulp.src('tests/**/*.spec.js')
-  .pipe(mocha({
-    reporter: 'dot'
-  }));
+    .pipe(mocha({
+      reporter: 'dot'
+    }));
 };
 
 buildChangelogTask.description = "Build the changelog";
 function buildChangelogTask() {
   return gulp.src('CHANGELOG.md', { buffer: false })
-  .pipe(conventionalChangelog({
-    preset: 'angular'
-  }))
-  .pipe(gulp.dest('./'));
+    .pipe(conventionalChangelog({
+      preset: 'angular'
+    }))
+    .pipe(gulp.dest('./'));
 };
 
 buildTask.description = "Build the package";
@@ -130,8 +138,8 @@ function buildTask(done) {
 };
 
 /*
-* Prepublish tasks
-*/
+ * Prepublish tasks
+ */
 prepublishCheckEverythingCommittedTask.description = "Check if everything is committed";
 function prepublishCheckEverythingCommittedTask(done) {
   git.status({args: '--porcelain', quiet: true}, function (err, stdout) {
