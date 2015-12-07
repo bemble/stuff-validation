@@ -5,7 +5,6 @@ Node module that allows you to validate data according to rules.
 ## Installation
 
 * `npm install data-validation --save`
-* `bower install data-validation`
 
 ## How it works ?
 
