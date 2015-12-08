@@ -56,6 +56,7 @@ describe('RulesCollection', () => {
 
     itRule('definedAndNotNan');
     itRule('required');
+    itRule('equals');
     itRule('greaterThan');
     itRule('lowerThan');
   });

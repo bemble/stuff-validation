@@ -17,7 +17,7 @@ export class ValidationRule {
    */
   constructor(rawRule:Rule|string, public parameters?:any[]|any, public applyCondition?:Function|any) {
     if (!rawRule) {
-      throw "RawRule must be a instance of Rule or a not-empty string";
+      throw "RawRule must be an instance of Rule or a not-empty string";
     }
     this.rule = rawRule instanceof Rule ? rawRule : RulesCollection.getRule(rawRule.toString());
   }

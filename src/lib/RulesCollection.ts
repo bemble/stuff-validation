@@ -25,6 +25,7 @@ export class RulesCollection {
     RulesCollection.collection = {};
     RulesCollection.collection['definedAndNotNan'] = new DefinedAndNotNan();
     RulesCollection.collection['required'] = new Required();
+    RulesCollection.collection['equals'] = new GreaterThan();
     RulesCollection.collection['greaterThan'] = new GreaterThan();
     RulesCollection.collection['lowerThan'] = new LowerThan();
   }

@@ -5,7 +5,7 @@ export class GreaterThan extends Rule {
     /**
      * Value is valid when greater than the reference value.
      * @param value Value to check
-     * @param reference Value taken as reference in comparison
+     * @param parameters Value taken as reference in comparison
      * @returns {boolean} True if valid, false otherwise
      */
     isValueValid(value:any, parameters:IArithmeticComparisonParameters):boolean {
