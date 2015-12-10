@@ -1,5 +1,3 @@
-/// <reference path="../../typings/es6-promise/es6-promise.d.ts" />
-/// <reference path="IEs6PromiseLibrary.d.ts" />
 var RulesCollection_1 = require('./RulesCollection');
 var ValidationRule_1 = require('./ValidationRule');
 var Validator = (function () {
@@ -9,7 +7,7 @@ var Validator = (function () {
     Validator.prototype.setPromiseLibrary = function (newPromiseLibrary) {
         this.Promise = newPromiseLibrary;
     };
-    Validator.prototype.validateValue = function (value, rules) {
+    Validator.prototype.isValueValid = function (value, rules) {
         var usedRules = rules ? rules : [];
         usedRules.unshift('definedAndNotNan');
         var isNullValid = this.isNullValid(value, usedRules);
@@ -21,7 +19,7 @@ var Validator = (function () {
         }
         return null;
     };
-    Validator.prototype.asyncValidateValue = function (value, rules) {
+    Validator.prototype.isValueAsyncValid = function (value, rules) {
         var _this = this;
         var usedRules = rules ? rules : [];
         var promises = usedRules.map(function (rule) {
@@ -30,15 +28,15 @@ var Validator = (function () {
         });
         return this.Promise.all(promises);
     };
-    Validator.prototype.isValueValid = function (value, rules, asyncRules) {
+    Validator.prototype.validateValue = function (value, rules, asyncRules) {
         var _this = this;
         var syncPromise = new this.Promise(function (resolve, reject) {
-            (_this.validateValue(value, rules) === null) ? resolve() : reject();
+            (_this.isValueValid(value, rules) === null) ? resolve() : reject();
         });
-        var asyncPromise = this.asyncValidateValue(value, asyncRules);
+        var asyncPromise = this.isValueAsyncValid(value, asyncRules);
         return this.Promise.all([syncPromise, asyncPromise]);
     };
-    Validator.prototype.isObjectValid = function (objectToValidate, validationConfig) {
+    Validator.prototype.validateObject = function (objectToValidate, validationConfig) {
         var promises = this.getObjectValidationPromise(objectToValidate, validationConfig).concat(this.getSubObjectsValidationPromises(objectToValidate));
         return this.Promise.all(promises);
     };
@@ -65,7 +63,7 @@ var Validator = (function () {
     Validator.prototype.getSubObjectsValidationPromises = function (objectToValidate) {
         var _this = this;
         return this.getObjectProperties(objectToValidate).map(function (propertyName) {
-            return _this.isObjectValid(objectToValidate[propertyName]);
+            return _this.validateObject(objectToValidate[propertyName]);
         });
     };
     Validator.prototype.getPropertiesValidationPromise = function (propertiesName, objectToValidate, config) {
@@ -73,7 +71,7 @@ var Validator = (function () {
         return propertiesName.map(function (propertyName) {
             var rules = config && config.rules && config.rules[propertyName];
             var asyncRules = config && config.asyncRules && config.asyncRules[propertyName];
-            return _this.isValueValid(objectToValidate[propertyName], rules, asyncRules);
+            return _this.validateValue(objectToValidate[propertyName], rules, asyncRules);
         });
     };
     Validator.getValidationConfiguration = function (objectToValidate, validationConfig) {

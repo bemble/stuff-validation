@@ -1,6 +1,7 @@
 import {Rule} from './Rule';
 import {DefinedAndNotNan} from './Rules/DefinedAndNotNan';
 import {Required} from './Rules/Required';
+import {Equals} from './Rules/Equals';
 import {GreaterThan} from './Rules/GreaterThan';
 import {LowerThan} from './Rules/LowerThan';
 
@@ -25,7 +26,7 @@ export class RulesCollection {
     RulesCollection.collection = {};
     RulesCollection.collection['definedAndNotNan'] = new DefinedAndNotNan();
     RulesCollection.collection['required'] = new Required();
-    RulesCollection.collection['equals'] = new GreaterThan();
+    RulesCollection.collection['equals'] = new Equals();
     RulesCollection.collection['greaterThan'] = new GreaterThan();
     RulesCollection.collection['lowerThan'] = new LowerThan();
   }

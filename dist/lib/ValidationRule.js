@@ -1,5 +1,3 @@
-/// <reference path="../../typings/es6-promise/es6-promise.d.ts" />
-/// <reference path="IEs6PromiseLibrary.d.ts" />
 var Rule_1 = require('./Rule');
 var RulesCollection_1 = require('./RulesCollection');
 var ValidationRule = (function () {
@@ -7,7 +5,7 @@ var ValidationRule = (function () {
         this.parameters = parameters;
         this.applyCondition = applyCondition;
         if (!rawRule) {
-            throw "RawRule must be a instance of Rule or a not-empty string";
+            throw "RawRule must be an instance of Rule or a not-empty string";
         }
         this.rule = rawRule instanceof Rule_1.Rule ? rawRule : RulesCollection_1.RulesCollection.getRule(rawRule.toString());
     }
