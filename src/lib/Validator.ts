@@ -24,7 +24,7 @@ export class Validator {
   * @param rules Rules that the value must pass
   * @returns The first rule that fail, null if object is valid.
   */
-  validateValue(value:any, rules?:(ValidationRule|Rule|string)[]):ValidationRule {
+  isValueValid(value:any, rules?:(ValidationRule|Rule|string)[]):ValidationRule {
     var usedRules = rules ? rules : [];
     usedRules.unshift('definedAndNotNan');
     var isNullValid = this.isNullValid(value, usedRules);
@@ -44,7 +44,7 @@ export class Validator {
   * @param rules Rules that the value must pass
   * @returns Resolved promise if the value is valid, rejected promise with the first failed rule otherwise.
   */
-  asyncValidateValue(value:any, rules?:(ValidationRule|Rule|string)[]):Promise<ValidationRule|void> {
+  isValueAsyncValid(value:any, rules?:(ValidationRule|Rule|string)[]):Promise<ValidationRule|void> {
     var usedRules = rules ? rules : [];
     var promises:Promise<ValidationRule|void>[] = usedRules.map((rule:Rule) => {
       var validationRule:ValidationRule = Validator.getValidationRule(rule);
@@ -60,11 +60,11 @@ export class Validator {
   * @param asyncRules Asynchronous rules that the value must pass
   * @returns Resolved promise if the value is valid, rejected promise otherwise.
   */
-  isValueValid(value:any, rules?:(ValidationRule|Rule|string)[], asyncRules?:(ValidationRule|Rule|string)[]):Promise<any> {
+  validateValue(value:any, rules?:(ValidationRule|Rule|string)[], asyncRules?:(ValidationRule|Rule|string)[]):Promise<any> {
     var syncPromise:Promise<any> = new this.Promise((resolve:Function, reject:Function) => {
-      (this.validateValue(value, rules) === null) ? resolve() : reject();
+      (this.isValueValid(value, rules) === null) ? resolve() : reject();
     });
-    var asyncPromise:Promise<any> = this.asyncValidateValue(value, asyncRules);
+    var asyncPromise:Promise<any> = this.isValueAsyncValid(value, asyncRules);
     return this.Promise.all([syncPromise, asyncPromise]);
   }
 
@@ -75,7 +75,7 @@ export class Validator {
   * @param validationConfig Configuration of the validation
   * @returns Resolved promise if the object is valid, rejected promise otherwise.
   */
-  isObjectValid(objectToValidate:any, validationConfig?:IValidationConfiguration):Promise<any> {
+  validateObject(objectToValidate:any, validationConfig?:IValidationConfiguration):Promise<any> {
     var promises:Promise<any>[] = this.getObjectValidationPromise(objectToValidate, validationConfig).concat(this.getSubObjectsValidationPromises(objectToValidate));
     return this.Promise.all(promises);
   }
@@ -108,7 +108,7 @@ export class Validator {
 
   private getSubObjectsValidationPromises(objectToValidate:any):Promise<any>[] {
     return this.getObjectProperties(objectToValidate).map((propertyName:string) => {
-      return this.isObjectValid(objectToValidate[propertyName]);
+      return this.validateObject(objectToValidate[propertyName]);
     });
   }
 
@@ -116,7 +116,7 @@ export class Validator {
     return propertiesName.map((propertyName) => {
       var rules = config && config.rules && config.rules[propertyName];
       var asyncRules = config && config.asyncRules && config.asyncRules[propertyName];
-      return this.isValueValid(objectToValidate[propertyName], rules, asyncRules);
+      return this.validateValue(objectToValidate[propertyName], rules, asyncRules);
     });
   }
 

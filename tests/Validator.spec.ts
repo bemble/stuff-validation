@@ -21,7 +21,7 @@ describe('Validator', () => {
     RulesCollection.reset();
   });
 
-  describe('validateValue function', () => {
+  describe('isValueValid function', () => {
     it('calls isValueValid of the given validationRule rule when calling', () => {
       var rule:FakeRule = new FakeRule();
       sinon.spy(rule, 'isValueValid');
@@ -43,16 +43,16 @@ describe('Validator', () => {
       var ruleStub = sinon.stub(rule, 'isValueValid').returns(false);
       RulesCollection.addRule('fakeRule', rule);
 
-      var invalidRule = validator.validateValue(123, ['fakeRule']);
+      var invalidRule = validator.isValueValid(123, ['fakeRule']);
       expect(invalidRule.rule).to.equal(rule);
 
       ruleStub.returns(true);
-      invalidRule = validator.validateValue(123, ['fakeRule']);
+      invalidRule = validator.isValueValid(123, ['fakeRule']);
       expect(invalidRule).to.be.null;
     });
 
     it('always add notUndefinedOrEmpty rule', () => {
-      var invalidRule = validator.validateValue(undefined);
+      var invalidRule = validator.isValueValid(undefined);
       expect(invalidRule.rule instanceof DefinedAndNotNan).to.be.true;
     });
 
@@ -62,7 +62,7 @@ describe('Validator', () => {
       sinon.spy(rule, 'isValueValid');
       sinon.spy(rule2, 'isValueValid');
 
-      validator.validateValue(123, [rule, rule2]);
+      validator.isValueValid(123, [rule, rule2]);
       expect(rule.isValueValid).to.have.been.called;
       expect(rule2.isValueValid).to.have.been.called;
     });
@@ -75,13 +75,13 @@ describe('Validator', () => {
       sinon.spy(rule2, 'isValueValid');
       var rule3Stub = sinon.stub(rule3, 'isValueValid').returns(true);
 
-      var failedRule = validator.validateValue(123, [rule1, rule2, rule3]);
+      var failedRule = validator.isValueValid(123, [rule1, rule2, rule3]);
       expect(failedRule).to.be.null;
 
       rule1Stub.returns(false).reset();
       rule3Stub.returns(false).reset();
 
-      failedRule = validator.validateValue(123, [rule1, rule2, rule3]);
+      failedRule = validator.isValueValid(123, [rule1, rule2, rule3]);
       expect(failedRule.rule).to.equal(rule1);
       expect(rule2.isValueValid).to.calledOnce;
     });
@@ -90,20 +90,20 @@ describe('Validator', () => {
       var rule:FakeRule = new FakeRule();
       sinon.stub(rule, 'isValueValid', () => false);
 
-      var failedRule = validator.validateValue(null, [rule]);
+      var failedRule = validator.isValueValid(null, [rule]);
       expect(failedRule).to.be.null;
       expect(rule.isValueValid).to.not.have.been.called;
     });
   });
 
-  describe('asyncValidateValue function', () => {
+  describe('isValueAsyncValid function', () => {
     it('returns a promise', () => {
-      var ret:any = validator.asyncValidateValue(null, []);
+      var ret:any = validator.isValueAsyncValid(null, []);
       expect(ret.then).to.not.be.undefined;
     });
 
     it('returns a resovled promise if called without rules', (done:any) => {
-      var ret:any = validator.asyncValidateValue(null);
+      var ret:any = validator.isValueAsyncValid(null);
       ret.then(() => {
         expect(true).to.be.true;
       },() => {
@@ -115,7 +115,7 @@ describe('Validator', () => {
       var rule1:FakeRule = new FakeRule(Promise.resolve());
       var rule2:FakeRule = new FakeRule(Promise.resolve());
 
-      var ret:any = validator.asyncValidateValue(null, [rule1, rule2]);
+      var ret:any = validator.isValueAsyncValid(null, [rule1, rule2]);
       ret.then(() => {
         expect(true).to.be.true;
       },() => {
@@ -127,7 +127,7 @@ describe('Validator', () => {
       var rule1:FakeRule = new FakeRule(Promise.reject(null));
       var rule2:FakeRule = new FakeRule(Promise.reject(null));
 
-      var ret:any = validator.asyncValidateValue(null, [rule1, rule2]);
+      var ret:any = validator.isValueAsyncValid(null, [rule1, rule2]);
       ret.then(() => {
         expect(true).to.be.false;
       },(reason:ValidationRule) => {
@@ -151,21 +151,21 @@ describe('Validator', () => {
       var validationRule:ValidationRule = new ValidationRule(rule);
       sinon.spy(validationRule, 'asyncIsValueValid');
 
-      validator.asyncValidateValue(null, [validationRule]).then(() => {
+      validator.isValueAsyncValid(null, [validationRule]).then(() => {
         expect(bluebird.Promise.all).to.have.been.called;
         expect(validationRule.asyncIsValueValid).to.have.been.calledWith(null, bluebird.Promise);
       }).then(done.bind(null, null), done);
     });
   });
 
-  describe('isValueValid function', () => {
+  describe('validateValue function', () => {
     describe('synchronous validation', () => {
       it('calls validateValue', (done:any) => {
         var rule:FakeRule = new FakeRule();
 
-        sinon.spy(validator, 'validateValue');
-        validator.isValueValid(undefined, [rule]).then(() => {
-          expect(validator.validateValue).to.have.been.calledWith(undefined, ['definedAndNotNan', rule]);
+        sinon.spy(validator, 'isValueValid');
+        validator.validateValue(undefined, [rule]).then(() => {
+          expect(validator.isValueValid).to.have.been.calledWith(undefined, ['definedAndNotNan', rule]);
         }).then(done.bind(null, null), done);
       });
 
@@ -174,7 +174,7 @@ describe('Validator', () => {
         var rule2:FakeRule = new FakeRule();
         var rule3:FakeRule = new FakeRule();
 
-        validator.isValueValid(123, [rule, rule2, rule3]).then(() => {
+        validator.validateValue(123, [rule, rule2, rule3]).then(() => {
           expect(true).to.be.true;
         }, () => {
           expect(true).to.be.true;
@@ -186,7 +186,7 @@ describe('Validator', () => {
         var rule2:FakeRule = new FakeRule(false);
         var rule3:FakeRule = new FakeRule();
 
-        validator.isValueValid(123, [rule, rule2, rule3]).then(() => {
+        validator.validateValue(123, [rule, rule2, rule3]).then(() => {
           expect(true).to.be.false;
         }, () => {
           expect(true).to.be.true;
@@ -199,18 +199,17 @@ describe('Validator', () => {
         var rule:FakeRule = new FakeRule();
         var asyncRule:FakeRule = new FakeRule(Promise.resolve(null));
 
-        sinon.spy(validator, 'asyncValidateValue');
-        validator.isValueValid(123, [rule], [asyncRule]).then(() => {
-          expect(validator.asyncValidateValue).to.have.been.calledWith(123, [asyncRule]);
+        sinon.spy(validator, 'isValueAsyncValid');
+        validator.validateValue(123, [rule], [asyncRule]).then(() => {
+          expect(validator.isValueAsyncValid).to.have.been.calledWith(123, [asyncRule]);
         }).then(done.bind(null, null), done);
       });
 
-      it('returns a rejected promise if async validation was successfull', (done:any) => {
+      it('returns a rejected promise if async validation was unsuccessfull', (done:any) => {
         var rule:FakeRule = new FakeRule();
         var asyncRule:FakeRule = new FakeRule(Promise.reject(null));
 
-        sinon.spy(validator, 'asyncValidateValue');
-        validator.isValueValid(123, [rule], [asyncRule]).then(() => {
+        validator.validateValue(123, [rule], [asyncRule]).then(() => {
           expect(true).to.be.false;
         },() => {
           expect(true).to.be.true;
@@ -219,17 +218,17 @@ describe('Validator', () => {
     });
   });
 
-  describe('isObjectValid function', () => {
+  describe('validateObject function', () => {
     it('returns a resolved promise if no validationRules on the validated object', (done:any) => {
       var validatedObject:any = {
         value1: ''
       };
-      validator.isObjectValid(validatedObject, <IValidationConfiguration>{}).then(() => {
+      validator.validateObject(validatedObject, <IValidationConfiguration>{}).then(() => {
         expect(true).to.be.true;
       }).then(done.bind(null, null), done);
     });
 
-    it('relies on isValueValid', (done) => {
+    it('relies on validateValue', (done) => {
       var validatedObject:any = {
         value1: '',
       };
@@ -238,9 +237,9 @@ describe('Validator', () => {
           value1: [new FakeRule()]
         }
       };
-      sinon.spy(validator, 'isValueValid');
-      validator.isObjectValid(validatedObject, validationConfiguration).then(() => {
-        expect(validator.isValueValid).to.have.been.called;
+      sinon.spy(validator, 'validateValue');
+      validator.validateObject(validatedObject, validationConfiguration).then(() => {
+        expect(validator.validateValue).to.have.been.called;
       }).then(done.bind(null, null), done);
     });
 
@@ -256,13 +255,13 @@ describe('Validator', () => {
           value1: [new FakeRule(Promise.resolve())]
         }
       };
-      sinon.spy(validator, 'isValueValid');
-      validator.isObjectValid(validatedObject, validationConfiguration).then(() => {
-        expect(validator.isValueValid).to.have.been.calledOnce;
+      sinon.spy(validator, 'validateValue');
+      validator.validateObject(validatedObject, validationConfiguration).then(() => {
+        expect(validator.validateValue).to.have.been.calledOnce;
       }).then(done.bind(null, null), done);
     });
 
-    it('returns false if one of the validated object properties is not a valid value', (done:any) => {
+    it('returns a rejected promise if one of the validated object properties is not a valid value', (done:any) => {
       var rule:FakeRule = new FakeRule(false);
 
       var validatedObject:any = {
@@ -273,7 +272,7 @@ describe('Validator', () => {
           value1: [rule]
         }
       };
-      validator.isObjectValid(validatedObject, validationConfiguration).then(() => {
+      validator.validateObject(validatedObject, validationConfiguration).then(() => {
         expect(true).to.be.false;
       }, () => {
         expect(true).to.be.true;
@@ -296,7 +295,7 @@ describe('Validator', () => {
           validationConfiguration: validationConfiguration
         }
       };
-      validator.isObjectValid(validatedObject).then(() => {
+      validator.validateObject(validatedObject).then(() => {
         expect(false).to.be.true;
       }, () => {
         expect(true).to.be.true;
@@ -319,7 +318,7 @@ describe('Validator', () => {
           validationConfiguration: validationConfiguration
         }]
       };
-      validator.isObjectValid(validatedObject).then(() => {
+      validator.validateObject(validatedObject).then(() => {
         expect(false).to.be.true;
       }, () => {
         expect(true).to.be.true;
