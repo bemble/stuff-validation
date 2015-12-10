@@ -2,7 +2,7 @@ import {Rule} from '../Rule';
 
 export class Required extends Rule {
   /**
-  * Value is valid when not null, undefined, empty object, empty string, empty array or NaN.
+  * Value is valid when not null, empty object, empty string or empty array.
   * @param value Value to check
   * @returns {boolean} True if valid, false otherwise
   */

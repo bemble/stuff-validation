@@ -4,7 +4,8 @@ import {Rule} from '../Rule';
 export class Equals extends Rule {
 
   /**
-   * Value is valid when greater than the reference value.
+   * Value is valid when equals the reference value.
+   * When working with objects, valueOf or toString are used, not their reference.
    * @param value Value to check
    * @param reference Value taken as reference in comparison
    * @returns {boolean} True if valid, false otherwise
