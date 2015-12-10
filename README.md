@@ -17,19 +17,19 @@ Documentation can be read on the [wiki](https://github.com/pierrecle/data-valida
 ```javascript
 // Dependencies stuff
 var dv = require('data-validation');
-var DataValidator = dv.Validator;
+var dataValidator = new dv.Validator();
 var ValidationRule = dv.ValidationRule;
 
 // Basic validation
-console.log(DataValidator.isValueValid(undefined)); // failed: ValidationRule with an instance of DefinedOrNotNan as rule
-console.log(DataValidator.isValueValid(null)); // success:: null
-console.log(DataValidator.isValueValid(null, ['required'])); // failed: ValidationRule with an instance of Required as rule
+console.log(dataValidator.isValueValid(undefined)); // failed: ValidationRule with an instance of DefinedOrNotNan as rule
+console.log(dataValidator.isValueValid(null)); // success:: null
+console.log(dataValidator.isValueValid(null, ['required'])); // failed: ValidationRule with an instance of Required as rule
 
 // Rules with parameters
 var dateTest = new Date('2015-01-12');
 var dateRef = new Date('2015-01-13');
 var dateValidationRule = new ValidationRule('lowerThan', { reference: dateRef, orEqual: false });
-console.log(DataValidator.isValueValid(dateTest, [dateValidationRule])); // success: null
+console.log(dataValidator.isValueValid(dateTest, [dateValidationRule])); // success: null
 ```
 
 #### Object validation
@@ -37,7 +37,7 @@ console.log(DataValidator.isValueValid(dateTest, [dateValidationRule])); // succ
 ```javascript
 // Dependencies stuff
 var dv = require('data-validation');
-var DataValidator = dv.Validator;
+var dataValidator = new dv.Validator();
 var ValidationRule = dv.ValidationRule;
 
 function MyModel() {
@@ -57,13 +57,13 @@ function MyModelValidationRules(model) {
 
 var model = new MyModel();
 var modelValidationRules = new MyModelValidationRules(model);
-DataValidator.validateValue(model.date, modelValidationRules.date).then(function() {
+dataValidator.validateValue(model.date, modelValidationRules.date).then(function() {
   console.log('Yeay date is valid');
 }, function(failingRule) {
   console.log(':( date is not valid because of '+failingValidationRule.rule);
 }); // Yeay date is valid
 
-DataValidator.validateObject(model, modelValidationRules).then(function() {
+dataValidator.validateObject(model, modelValidationRules).then(function() {
   console.log('Yeay model is valid');
 }, function(failingRule) {
   console.log(':( model is not valid because of ' + failingValidationRule.rule.constructor.name + ": " + failingValidationRule.getErrorMessage());
