@@ -1,5 +1,5 @@
 {
-  "name": "data-validation",
+  "name": "stuff-validation",
   "version": "0.1.0",
   "description": "Node module that allows you to validate data according to rules.",
   "main": "dist/data-validation.js",
