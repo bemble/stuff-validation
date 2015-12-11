@@ -106,7 +106,7 @@ function buildTypescriptTask() {
 
 buildTypescriptDeclarationTask.description = "Build Typescript declaration file";
 function buildTypescriptDeclarationTask() {
-  return gulp.src('./src/data-validation.d.ts', {base: './src'})
+  return gulp.src('./src/stuff-validation.d.ts', {base: './src'})
     .pipe(gulp.dest('./dist/'));
 }
 

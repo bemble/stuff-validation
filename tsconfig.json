@@ -12,7 +12,6 @@
     "!**/*.d.ts"
   ],
   "files": [
-    "src/data-validation.ts",
     "src/lib/IValidationConfiguration.ts",
     "src/lib/Rule.ts",
     "src/lib/Rules/DefinedAndNotNan.ts",
@@ -24,6 +23,7 @@
     "src/lib/RulesCollection.ts",
     "src/lib/ValidationRule.ts",
     "src/lib/Validator.ts",
+    "src/stuff-validation.ts",
     "tests/mock/FakeRule.ts",
     "tests/Rules/DefinedAndNotNan.spec.ts",
     "tests/Rules/Equals.spec.ts",

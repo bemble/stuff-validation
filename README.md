@@ -1,4 +1,4 @@
-# data-validation
+# stuff-validation
 
 Node module that allows you to validate data according to rules.
 
@@ -8,7 +8,7 @@ Node module that allows you to validate data according to rules.
 
 ## Documentation
 
-Documentation can be read on the [wiki](https://github.com/pierrecle/data-validation/wiki/Documentation) or in the source code and tests directly.
+Documentation can be read on the [wiki](https://github.com/pierrecle/stuff-validation/wiki/Documentation) or in the source code and tests directly.
 
 ### TL;DR
 

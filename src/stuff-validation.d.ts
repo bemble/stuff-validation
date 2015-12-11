@@ -1,4 +1,4 @@
-declare module dataValidation {
+declare module stuffValidation {
   interface Rule {
     isValueValid(value:any, parameters?:any): boolean;
     getErrorMessage(parameters?:any): string;
@@ -31,7 +31,7 @@ declare module dataValidation {
     valiateObject(objectToValidate:any, validationConfig?:IValidationConfiguration): Promise<any>;
   }
 
-  interface DataValidationModule {
+  interface StuffValidationModule {
     Rule: {
       prototype: Rule;
     };

@@ -1,14 +1,14 @@
 {
   "name": "stuff-validation",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Node module that allows you to validate data according to rules.",
-  "main": "dist/data-validation.js",
+  "main": "dist/stuff-validation.js",
   "scripts": {
     "test": "gulp tsd typescript test"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pierrecle/data-validation.git"
+    "url": "git+https://github.com/pierrecle/stuff-validation.git"
   },
   "keywords": [
     "validation",
@@ -18,9 +18,9 @@
   "author": "Pierre CLEMENT <pierre@clement.re> (http://www.pierre-clement.info)",
   "license": "LGPL-3.0",
   "bugs": {
-    "url": "https://github.com/pierrecle/data-validation/issues"
+    "url": "https://github.com/pierrecle/stuff-validation/issues"
   },
-  "homepage": "https://github.com/pierrecle/data-validation#readme",
+  "homepage": "https://github.com/pierrecle/stuff-validation#readme",
   "devDependencies": {
     "bluebird": "^3.0.6",
     "chai": "^3.3.0",
