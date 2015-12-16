@@ -10,3 +10,5 @@ var LowerThan_1 = require('./Rules/LowerThan');
 exports.LowerThan = LowerThan_1.LowerThan;
 var Is_1 = require('./Rules/Is');
 exports.Is = Is_1.Is;
+var Pattern_1 = require('./Rules/Pattern');
+exports.Pattern = Pattern_1.Pattern;
