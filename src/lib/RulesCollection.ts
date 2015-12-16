@@ -1,9 +1,5 @@
 import {Rule} from './Rule';
-import {DefinedAndNotNan} from './Rules/DefinedAndNotNan';
-import {Required} from './Rules/Required';
-import {Equals} from './Rules/Equals';
-import {GreaterThan} from './Rules/GreaterThan';
-import {LowerThan} from './Rules/LowerThan';
+import * as Rules from './Rules';
 
 /**
 * Collection of rules, to get them by a string and reduce the number of instance of rules.
@@ -24,11 +20,10 @@ export class RulesCollection {
    */
   public static reset () {
     RulesCollection.collection = {};
-    RulesCollection.collection['definedAndNotNan'] = new DefinedAndNotNan();
-    RulesCollection.collection['required'] = new Required();
-    RulesCollection.collection['equals'] = new Equals();
-    RulesCollection.collection['greaterThan'] = new GreaterThan();
-    RulesCollection.collection['lowerThan'] = new LowerThan();
+    Object.keys(Rules).forEach(function(ruleClassname:string) {
+      var ruleName = ruleClassname[0].toLowerCase() + ruleClassname.substr(1);
+      RulesCollection.collection[ruleName] = new Rules[ruleClassname]();
+    });
   }
 
   /**

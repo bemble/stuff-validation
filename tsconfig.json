@@ -14,6 +14,7 @@
   "files": [
     "src/lib/IValidationConfiguration.ts",
     "src/lib/Rule.ts",
+    "src/lib/Rules.ts",
     "src/lib/Rules/DefinedAndNotNan.ts",
     "src/lib/Rules/Equals.ts",
     "src/lib/Rules/GreaterThan.ts",
