@@ -1,5 +1,5 @@
 import {Rule} from '../Rule';
-import {IArithmeticComparisonParameters} from './IArithmeticComparisonParameters';
+import {IArithmeticComparisonParameters} from './../RuleParameters/IArithmeticComparisonParameters';
 
 export class LowerThan extends Rule {
 

@@ -4,7 +4,7 @@ import chai = require('chai');
 var expect:any = chai.expect;
 
 import {Rule} from "../../src/lib/Rule";
-import {IArithmeticComparisonParameters} from "../../src/lib/Rules/IArithmeticComparisonParameters";
+import {IArithmeticComparisonParameters} from "../../src/lib/RuleParameters/IArithmeticComparisonParameters";
 import {LowerThan} from "../../src/lib/Rules/LowerThan";
 
 describe('LowerThan', () => {

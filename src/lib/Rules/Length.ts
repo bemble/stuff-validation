@@ -1,5 +1,5 @@
 import {Rule} from '../Rule';
-import {ILengthParameters} from './ILengthParameters';
+import {ILengthParameters} from './../RuleParameters/ILengthParameters';
 
 export class Length extends Rule {
 

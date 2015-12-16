@@ -6,3 +6,6 @@ typings
 *.js.map
 tests/**/*.js
 src/**/*.js
+
+# Ignore generated interfaces, empty files
+dist/lib/**/I[A-Z]*.js
