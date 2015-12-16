@@ -20,9 +20,11 @@ export class RulesCollection {
    */
   public static reset () {
     RulesCollection.collection = {};
-    Object.keys(Rules).forEach(function(ruleClassname:string) {
-      var ruleName = ruleClassname[0].toLowerCase() + ruleClassname.substr(1);
-      RulesCollection.collection[ruleName] = new Rules[ruleClassname]();
+    // Hacky but prevent tsc to complaint about index signature (TS7017)
+    var RulesList:{[ruleClassname: string]: any} = <{[ruleClassname: string]: any}> Rules;
+    Object.keys(RulesList).forEach(function(ruleClassname:any) {
+      var ruleName:string = ruleClassname[0].toLowerCase() + ruleClassname.substr(1);
+      RulesCollection.collection[ruleName] = <Rule> new RulesList[ruleClassname]();
     });
   }
 

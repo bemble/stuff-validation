@@ -54,10 +54,8 @@ describe('RulesCollection', () => {
       });
     }
 
-    itRule('definedAndNotNan');
-    itRule('required');
-    itRule('equals');
-    itRule('greaterThan');
-    itRule('lowerThan');
+    ['definedAndNotNan', 'required', 'equals', 'greaterThan', 'lowerThan', 'is'].forEach(function(ruleName) {
+      itRule(ruleName);
+    });
   });
 });

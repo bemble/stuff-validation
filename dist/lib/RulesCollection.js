@@ -8,9 +8,10 @@ var RulesCollection = (function () {
     };
     RulesCollection.reset = function () {
         RulesCollection.collection = {};
-        Object.keys(Rules).forEach(function (ruleClassname) {
+        var RulesList = Rules;
+        Object.keys(RulesList).forEach(function (ruleClassname) {
             var ruleName = ruleClassname[0].toLowerCase() + ruleClassname.substr(1);
-            RulesCollection.collection[ruleName] = new Rules[ruleClassname]();
+            RulesCollection.collection[ruleName] = new RulesList[ruleClassname]();
         });
     };
     RulesCollection.addRule = function (ruleName, rule) {

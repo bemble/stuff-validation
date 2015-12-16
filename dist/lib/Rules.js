@@ -8,3 +8,5 @@ var GreaterThan_1 = require('./Rules/GreaterThan');
 exports.GreaterThan = GreaterThan_1.GreaterThan;
 var LowerThan_1 = require('./Rules/LowerThan');
 exports.LowerThan = LowerThan_1.LowerThan;
+var Is_1 = require('./Rules/Is');
+exports.Is = Is_1.Is;
