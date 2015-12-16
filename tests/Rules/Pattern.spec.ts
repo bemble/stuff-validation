@@ -21,7 +21,7 @@ describe('Pattern', () => {
       });
     });
 
-    it("replies true when 0, azerty, a not empty object is given", () => {
+    it("replies false given value does not match the given regexp", () => {
       [{value: 'az123', pattern: new RegExp("/^\d+/")}].forEach((conf) => {
         var valid = rule.isValueValid(conf.value, conf.pattern);
         expect(valid).to.be.false;

@@ -5,3 +5,4 @@ export {GreaterThan} from './Rules/GreaterThan';
 export {LowerThan} from './Rules/LowerThan';
 export {Is} from './Rules/Is';
 export {Pattern} from './Rules/Pattern';
+export {Length} from './Rules/Length';

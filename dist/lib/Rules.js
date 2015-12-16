@@ -12,3 +12,5 @@ var Is_1 = require('./Rules/Is');
 exports.Is = Is_1.Is;
 var Pattern_1 = require('./Rules/Pattern');
 exports.Pattern = Pattern_1.Pattern;
+var Length_1 = require('./Rules/Length');
+exports.Length = Length_1.Length;

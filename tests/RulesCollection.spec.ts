@@ -54,7 +54,7 @@ describe('RulesCollection', () => {
       });
     }
 
-    ['definedAndNotNan', 'required', 'equals', 'greaterThan', 'lowerThan', 'is', 'pattern'].forEach(function(ruleName) {
+    ['definedAndNotNan', 'required', 'equals', 'greaterThan', 'lowerThan', 'is', 'pattern', 'length'].forEach(function(ruleName) {
       itRule(ruleName);
     });
   });
