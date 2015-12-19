@@ -4,6 +4,7 @@ tests
 gulpfile.js
 tsconfig.json
 tsd.json
+typings
 
 # Ignore generated interfaces, empty files
 dist/lib/**/I[A-Z]*.js
