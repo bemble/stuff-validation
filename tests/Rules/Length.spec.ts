@@ -1,20 +1,16 @@
-/// <reference path="../../typings/tsd.d.ts" />
+/// <reference path="../../typings/sv-testing.d.ts" />
 
-import chai = require('chai');
-var expect:any = chai.expect;
-
-import {Rule} from "../../src/lib/Rule";
 import {Length} from "../../src/lib/Rules/Length";
 
-describe('MaxLength', () => {
-  var rule:Rule = null;
+suite('Length', () => {
+  var rule:any = null;
 
-  beforeEach(() => {
+  setup(() => {
     rule = new Length();
   });
 
-  describe('isValueValid', () => {
-    it("replies true when the length satisfy the parametrized conditions", () => {
+  suite('isValueValid', () => {
+    test("replies true when the length satisfy the parametrized conditions", () => {
       var tests:any = [
         {value: 'foo', parameters: {min: 1}},
         {value: 'foo', parameters: {max: 5}},
@@ -25,12 +21,12 @@ describe('MaxLength', () => {
       ];
 
       tests.forEach((conf:any) => {
-        var valid = rule.isValueValid(conf.value, conf.parameters);
-        expect(valid).to.be.true;
+        var valid:boolean = rule.isValueValid(conf.value, conf.parameters);
+        assert.isTrue(valid, conf);
       });
     });
 
-    it("replies false when the length does not satisfy the parametrized conditions", () => {
+    test("replies false when the length does not satisfy the parametrized conditions", () => {
       var tests:any = [
         {value: 'foo', parameters: {min: 4}},
         {value: 'foo', parameters: {max: 2}},
@@ -41,28 +37,29 @@ describe('MaxLength', () => {
 
       tests.forEach((conf:any) => {
         var valid:any = rule.isValueValid(conf.value, conf.parameters);
-        expect(valid).to.be.false;
+        assert.isFalse(valid, conf);
       });
     });
 
-    it("imply a priorty of equals parameter", () => {
-      var valid:any = rule.isValueValid('foo', {min: 1, max: 4, equals: 5});
-      expect(valid).to.be.false;
+    test("imply a priorty of equals parameter", () => {
+      var conf:any = {min: 1, max: 4, equals: 5};
+      var valid:any = rule.isValueValid('foo', conf);
+      assert.isFalse(valid, conf);
     });
 
-    it("handle arrays", () => {
-      var valid:any = rule.isValueValid([1,2,3], {min:0, max:4});
-      expect(valid).to.be.true;
-
-      valid = rule.isValueValid([1,2,3], {equals: 3});
-      expect(valid).to.be.true;
+    test("handle arrays", () => {
+      var tests:any[] = [{min:0, max:4}, {equals: 3}];
+      tests.forEach((conf:any) => {
+        var valid:any = rule.isValueValid([1,2,3], conf);
+        assert.isTrue(valid, conf);
+      });
     });
   });
 
-  xdescribe('getErrorMessage', () => {
-    it("gives a message for any value", () => {
+  suite('getErrorMessage', () => {
+    test("gives a message for any value", () => {
       var message:string = rule.getErrorMessage(3);
-      expect(message).to.equal("The value length must be lower or equal to 3.");
+      assert.equal(message, "The value length must be lower or equal to 3.");
     });
   });
 });

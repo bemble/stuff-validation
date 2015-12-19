@@ -1,41 +1,41 @@
-/// <reference path="../../typings/tsd.d.ts" />
+/// <reference path="../../typings/sv-testing.d.ts" />
 
-import chai = require('chai');
-var expect:any = chai.expect;
-
-import {Rule} from "../../src/lib/Rule";
 import {Pattern} from "../../src/lib/Rules/Pattern";
 
-describe('Pattern', () => {
-  var rule:Rule = null;
+suite('Pattern', () => {
+  var rule:any = null;
 
-  beforeEach(() => {
+  setup(() => {
     rule = new Pattern();
   });
 
-  describe('isValueValid', () => {
-    it("replies true when the value match the given regexp", () => {
-      [{value: 'az123', pattern: /\d+/}, {value: {toString: () => 'az123'}, pattern: /\d+/}].forEach((conf) => {
-        var valid = rule.isValueValid(conf.value, conf.pattern);
-        expect(valid).to.be.true;
+  suite('isValueValid', () => {
+    test("replies true when the value match the given regexp", () => {
+      var tests:any[] = [{value: 'az123', pattern: /\d+/}, {value: {toString: () => 'az123'}, pattern: /\d+/}];
+
+      tests.forEach((conf) => {
+        var valid:boolean = rule.isValueValid(conf.value, conf.pattern);
+        assert.isTrue(valid, conf);
       });
     });
 
-    it("replies false given value does not match the given regexp", () => {
-      [{value: 'az123', pattern: new RegExp("/^\d+/")}].forEach((conf) => {
-        var valid = rule.isValueValid(conf.value, conf.pattern);
-        expect(valid).to.be.false;
+    test("replies false given value does not match the given regexp", () => {
+      var tests:any[] = [{value: 'az123', pattern: new RegExp("/^\d+/")}];
+
+      tests.forEach((conf) => {
+        var valid:boolean = rule.isValueValid(conf.value, conf.pattern);
+        assert.isFalse(valid, conf);
       });
     });
   });
 
-  describe('getErrorMessage', () => {
-    it("gives a message for any value", () => {
+  suite('getErrorMessage', () => {
+    test("gives a message for any value", () => {
       var message:string = rule.getErrorMessage(/^\d+/);
-      expect(message).to.equal("The value must match /^\\d+/ pattern.");
+      assert.equal(message, "The value must match /^\\d+/ pattern.");
 
       message = rule.getErrorMessage({toString: () => 'bar'});
-      expect(message).to.equal("The value must match bar pattern.");
+      assert.equal(message, "The value must match bar pattern.");
     });
   });
 });

@@ -1,61 +1,59 @@
-/// <reference path="../typings/tsd.d.ts" />
+/// <reference path="../typings/sv-testing.d.ts" />
 
-import chai = require('chai');
 import {FakeRule} from "./mock/FakeRule";
-var expect:any = chai.expect;
 
 import {Rule} from "../src/lib/Rule";
 import {RulesCollection} from "../src/lib/RulesCollection"; 
 
-describe('RulesCollection', () => {
-  beforeEach(() => {
+suite('RulesCollection', () => {
+  setup(() => {
     RulesCollection.reset();
   });
 
-  it('add a rule', () => {
+  test('add a rule', () => {
     var rule:Rule = new FakeRule(true);
     RulesCollection.addRule('foobar', rule);
     var ruleGet = RulesCollection.getRule('foobar');
-    expect(ruleGet).to.equal(rule);
+    assert.equal(ruleGet, rule);
   });
 
-  it("reset the collection", () => {
+  test("reset the collection", () => {
     var rule:Rule = new FakeRule(true);
     RulesCollection.addRule('foobar', rule);
     RulesCollection.reset();
     var ruleGet = RulesCollection.getRule('foobar');
-    expect(ruleGet).to.be.undefined;
+    assert.isUndefined(ruleGet);
   });
 
-  it('cannot add rules with the same name', () => {
-    try {
-      var rule:Rule = new FakeRule(true);
-      RulesCollection.addRule('foobar', rule);
-      RulesCollection.addRule('foobar', rule);
-      expect(undefined).to.not.be.undefined;
-    }
-    catch(e) {
-      expect(e).to.not.be.undefined;
-    }
+  test('cannot add rules with the same name', () => {
+    var rule:Rule = new FakeRule(true);
+    RulesCollection.addRule('foobar', rule);
+    assert.throws(() => { RulesCollection.addRule('foobar', rule)});
   });
 
-  it('can set a rule', () => {
+  test('can set a rule', () => {
     var rule:Rule = new FakeRule();
     RulesCollection.setRule('required', rule);
     var requiredRule = RulesCollection.getRule('required');
-    expect(requiredRule).to.equal(rule);
+    assert.equal(requiredRule, rule);
   });
 
-  describe('registred rules', () => {
-    function itRule(ruleName:string) {
-      it('contains ' + ruleName + ' rule', () => {
-        var rule:Rule = RulesCollection.getRule(ruleName);
-        expect(rule).to.not.be.undefined;
-      });
-    }
-    
-    ['definedAndNotNan', 'required', 'equals', 'greaterThan', 'lowerThan', 'is', 'pattern', 'length', 'range'].forEach(function(ruleName) {
-      itRule(ruleName);
+  test('registred rules', () => {
+    var rulesName:string[] = [
+      'definedAndNotNan',
+      'required',
+      'equals',
+      'greaterThan',
+      'lowerThan',
+      'is',
+      'pattern',
+      'length',
+      'range'
+    ];
+
+    rulesName.forEach((ruleName:string) => {
+      var rule:Rule = RulesCollection.getRule(ruleName);
+      assert.isDefined(rule, ruleName);
     });
   });
 });

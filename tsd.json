@@ -6,22 +6,22 @@
   "bundle": "typings/tsd.d.ts",
   "installed": {
     "node/node.d.ts": {
-      "commit": "3fc1377ce29dd9670975cb68615edf1b819fc4a5"
+      "commit": "40c60850ad6c8175a62d5ab48c4e016ea5b3dffe"
     },
     "chai/chai.d.ts": {
-      "commit": "3fc1377ce29dd9670975cb68615edf1b819fc4a5"
+      "commit": "40c60850ad6c8175a62d5ab48c4e016ea5b3dffe"
     },
     "sinon/sinon.d.ts": {
-      "commit": "78403087985447808602abed828b3b5d8b8016cb"
+      "commit": "40c60850ad6c8175a62d5ab48c4e016ea5b3dffe"
     },
     "sinon-chai/sinon-chai.d.ts": {
-      "commit": "78403087985447808602abed828b3b5d8b8016cb"
+      "commit": "40c60850ad6c8175a62d5ab48c4e016ea5b3dffe"
     },
     "mocha/mocha.d.ts": {
-      "commit": "062f48ef51dd46520b9db3f516739d4a4e48d4bd"
+      "commit": "40c60850ad6c8175a62d5ab48c4e016ea5b3dffe"
     },
     "es6-promise/es6-promise.d.ts": {
-      "commit": "44cbde48eecd1918ed54b3be49a9752688b6c65a"
+      "commit": "40c60850ad6c8175a62d5ab48c4e016ea5b3dffe"
     }
   }
 }

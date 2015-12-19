@@ -2,9 +2,11 @@
 .DS_Store
 node_modules
 npm-debug.log
-typings
+typings/**/*
+!typings/sv-testing.d.ts
 *.js.map
-tests/**/*.js
+tests/**/*.spec.js
+tests/mock/
 src/**/*.js
 
 # Ignore generated interfaces, empty files

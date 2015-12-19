@@ -1,20 +1,16 @@
-/// <reference path="../../typings/tsd.d.ts" />
+/// <reference path="../../typings/sv-testing.d.ts" />
 
-import chai = require('chai');
-var expect:any = chai.expect;
-
-import {Rule} from "../../src/lib/Rule";
 import {Range} from "../../src/lib/Rules/Range";
 
-describe('MaxLength', () => {
-  var rule:Rule = null;
+suite('MaxLength', () => {
+  var rule:any = null;
 
-  beforeEach(() => {
+  setup(() => {
     rule = new Range();
   });
 
-  describe('isValueValid', () => {
-    it("replies true when the length satisfy the parametrized conditions", () => {
+  suite('isValueValid', () => {
+    test("replies true when the length satisfy the parametrized conditions", () => {
       var tests:any = [
         {value: 2, parameters: {min: 1, max: 3}},
         {value: 2, parameters: {min: 2, max: 3}},
@@ -26,12 +22,12 @@ describe('MaxLength', () => {
       ];
 
       tests.forEach((conf:any) => {
-        var valid = rule.isValueValid(conf.value, conf.parameters);
-        expect(valid).to.be.true;
+        var valid:boolean = rule.isValueValid(conf.value, conf.parameters);
+        assert.isTrue(valid, conf);
       });
     });
 
-    it("replies false when the length does not satisfy the parametrized conditions", () => {
+    test("replies false when the length does not satisfy the parametrized conditions", () => {
       var tests:any = [
         {value: 2, parameters: {min: 3, max: 4}},
         {value: 'abc', parameters: {min: 'b', max: 'c'}},
@@ -39,21 +35,21 @@ describe('MaxLength', () => {
       ];
 
       tests.forEach((conf:any) => {
-        var valid:any = rule.isValueValid(conf.value, conf.parameters);
-        expect(valid).to.be.false;
+        var valid:boolean = rule.isValueValid(conf.value, conf.parameters);
+        assert.isFalse(valid, conf);
       });
     });
   });
 
-  describe('getErrorMessage', () => {
-    it("gives a message for any value", () => {
+  suite('getErrorMessage', () => {
+    test("gives a message for any value", () => {
       var message:string = rule.getErrorMessage({min: 3, max: 4});
-      expect(message).to.equal("The value must be between 3 and 4.");
+      assert.equal(message, "The value must be between 3 and 4.");
 
       var date:Date = new Date();
       date.toString = () => "3";
       message = rule.getErrorMessage({min: date, max: 4});
-      expect(message).to.equal("The date must be between 3 and 4.");
+      assert.equal(message, "The date must be between 3 and 4.");
     });
   });
 });

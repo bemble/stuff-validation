@@ -36,7 +36,6 @@
     "gulp-util": "^3.0.6",
     "run-sequence": "^1.1.4",
     "sinon": "^1.17.1",
-    "sinon-chai": "^2.8.0",
     "source-map-support": "^0.4.0",
     "tsconfig-glob": "^0.3.2"
   }

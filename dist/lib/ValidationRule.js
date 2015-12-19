@@ -46,7 +46,7 @@ var ValidationRule = (function () {
         return rawValue;
     };
     ValidationRule.prototype.getErrorMessage = function () {
-        return this.rule.getErrorMessage(this.parameters);
+        return this.rule.getErrorMessage(this.getParametersValues());
     };
     return ValidationRule;
 })();

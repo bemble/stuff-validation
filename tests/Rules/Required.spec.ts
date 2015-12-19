@@ -1,29 +1,29 @@
-/// <reference path="../../typings/tsd.d.ts" />
+/// <reference path="../../typings/sv-testing.d.ts" />
 
-import chai = require('chai');
-var expect:any = chai.expect;
-
-import {Rule} from "../../src/lib/Rule";
 import {Required} from "../../src/lib/Rules/Required";
 
-describe('Required', () => {
-  var rule:Rule = null;
+suite('Required', () => {
+  var rule:any = null;
 
-  beforeEach(() => {
+  setup(() => {
     rule = new Required();
   });
 
-  it("replies false when null, empty string, empty array or empty object is given", () => {
-    [null, '', [], {}].forEach((value) => {
+  test("replies false when null, empty string, empty array or empty object is given", () => {
+    var tests:any[] = [null, '', [], {}];
+
+    tests.forEach((value) => {
       var valid = rule.isValueValid(value);
-      expect(valid).to.be.false;
+      assert.isFalse(valid, value);
     });
   });
 
-  it("replies true when 0, azerty, a not empty object, a not empty array or a boolean is given", () => {
-    [0, 'azerty', {test:'value'}, [12], true, false].forEach((value) => {
+  test("replies true when 0, azerty, a not empty object, a not empty array or a boolean is given", () => {
+    var tests:any[] = [0, 'azerty', {test:'value'}, [12], true, false];
+
+    tests.forEach((value) => {
       var valid = rule.isValueValid(value);
-      expect(valid).to.be.true;
+      assert.isTrue(valid, value);
     });
   });
 });

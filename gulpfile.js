@@ -54,7 +54,9 @@ function testTask(done) {
   require('source-map-support').install();
   return gulp.src('tests/**/*.spec.js')
     .pipe(mocha({
-      reporter: 'dot'
+      reporter: 'min',
+      ui: 'tdd',
+      require: ['./tests/common.js']
     }))
     .on('error', function() {
       done();
@@ -114,7 +116,9 @@ buildTestTask.description = "Run the tests and stop when fail";
 function buildTestTask() {
   return gulp.src('tests/**/*.spec.js')
     .pipe(mocha({
-      reporter: 'dot'
+      reporter: 'dot',
+      ui: 'tdd',
+      require: ['./tests/common.js']
     }));
 };
 
