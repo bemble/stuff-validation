@@ -187,8 +187,8 @@ suite("ValidationRule", () => {
   suite("getErrorMessage", () => {
     test("call rule.getErrorMessage with its parameters", () => {
       var tests:any[] = [
-        {act: {foo: 'bar'}, exp: {foo: 'bar'}}/*,
-        {act: {foo: ():string => 'barafoo'}, exp: {foo: 'barafoo'}}*/
+        {act: {foo: 'bar'}, exp: {foo: 'bar'}},
+        {act: {foo: ():string => 'barafoo'}, exp: {foo: 'barafoo'}}
       ];
 
       tests.forEach((conf:any) => {

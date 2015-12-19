@@ -86,6 +86,6 @@ export class ValidationRule {
    * @returns
    */
   getErrorMessage():string {
-    return this.rule.getErrorMessage(this.parameters);
+    return this.rule.getErrorMessage(this.getParametersValues());
   }
 }
