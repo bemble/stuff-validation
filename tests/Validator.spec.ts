@@ -1,4 +1,4 @@
-/// <reference path="../typings/tsd.d.ts" />
+/// <reference path="../typings/sv-testing.d.ts" />
 
 import {FakeRule} from "./mock/FakeRule";
 import {DefinedAndNotNan} from "../src/lib/Rules/DefinedAndNotNan";
