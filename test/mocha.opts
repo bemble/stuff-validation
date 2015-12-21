@@ -1,0 +1,5 @@
+--ui tdd
+--require ./test/common.js
+--require source-map-support/register
+--reporter dot
+--recursive

@@ -5,9 +5,9 @@ npm-debug.log
 typings/**/*
 !typings/sv-testing.d.ts
 *.js.map
-tests/**/*.spec.js
-tests/mock/
+test/**/*.spec.js
+test/mock/*.js
 src/**/*.js
 
 # Ignore generated interfaces, empty files
-dist/lib/**/I[A-Z]*.js
+dist/lib/**/I[A-Z][a-zA-Z0-9.]*.js
