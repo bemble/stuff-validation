@@ -3,7 +3,7 @@ node_js:
   - "4.2.6"
   - "5"
 before_script:
-  - echo '{ "token": "'$GH_TOKEN'" }' > ~/.tsdrc
+  - "echo '{ \"token\": \"$GH_TOKEN\" }' > ~/.tsdrc"
   - npm install -g gulp-cli mocha istanbul coveralls
   - rm ~/.tsdrc
 after_script:
