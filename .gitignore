@@ -1,6 +1,7 @@
 .idea
 .DS_Store
 node_modules
+coverage
 npm-debug.log
 typings/**/*
 !typings/sv-testing.d.ts

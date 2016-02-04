@@ -4,7 +4,8 @@
   "description": "Node module that allows you to validate data according to rules.",
   "main": "dist/stuff-validation.js",
   "scripts": {
-    "test": "gulp tsd typescript test"
+    "test": "gulp tsd typescript test",
+    "coveralls": "istanbul cover _mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | coveralls"
   },
   "repository": {
     "type": "git",
@@ -37,5 +38,8 @@
     "run-sequence": "^1.1.4",
     "sinon": "^1.17.1",
     "source-map-support": "^0.4.0"
+  },
+  "engines": {
+    "node": ">=4.2.6"
   }
 }
