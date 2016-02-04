@@ -3,11 +3,11 @@ node_js:
   - "4.2.6"
   - "5"
 before_script:
-  - "echo '{ \"token\": \"$GH_TOKEN\" }' > ~/.tsdrc"
+  - "echo '{ \"token\": \"'$GH_TOKEN'\" }' > ~/.tsdrc"
   - npm install -g gulp-cli mocha istanbul coveralls
-  - rm ~/.tsdrc
 after_script:
   - npm run coveralls
+  - rm ~/.tsdrc
 env:
   global:
     - secure: "flhRuvJfys4/0pi0Xm8k/f6QblI9vXs4qRo9HJl42FE0t9TMOyzs0m6cHmLzUlb1KAUptOd1imy/bysKj9v+u/PPxH+l6CfAUTSEXkI5w3heNzxeXF3vTwIkSHfi6m4x1gccPDDRSZUsi/abSQPAoktxyIdAhL+wfqbGPklVx7FoO85aXJU7vx67/r4q2Odd4sJ7PxuFZiXbLocnzFGP9PAkFUzpXClhFwj3nmu9JqctW8O6K+pLXliSi9R6ILZgjJD0JJPZ/yIi1MfJPW3n05LxvOYway5IFgFdb8LGWNTj3UeLS8fFkKXk+HpDjonmXwHY6/QRkLPYmc6yS2tA6gB8Zyrh8xT+VOy87jPfxomjgybbeVHeOz3Ix3+pDQ2tWwvLrEx+wJrxKbiraBEPgQsuV0SdT2IQrvyzAoW59LnKjKSSjAh/67+S13kNHB71k0nquo1cf63F+ifILjiKfDB1FLAXQkjIP/r85NaR6YDvYZEtMHynV8HMf2hQBmx55zrbPXCfrOzCc3/arBh1rcHIgntqRubWvLWZ/Dqc/9Lp+K1b28az+15hifNIz/n4mv/wgu/y3rqMepONfa81S7JmAtnG0qL0RGn8BCY3hBBHyX5fDRRwYMtAugCfBrPxnhKK2geaJjSaATY5oxJOANLt5faCf9KjkSaOhr8Y80A="
