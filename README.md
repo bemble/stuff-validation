@@ -1,6 +1,10 @@
 # stuff-validation
 
-Node module that allows you to validate data according to rules.
+[![NPM version][npm-image]][npm-url]
+[![Build Status][travis-image]][travis-url]
+[![Coverage Status][coveralls-image]][coveralls-url]
+
+> Node module that allows you to validate data according to rules.
 
 ## Installation
 
@@ -80,3 +84,10 @@ validator.validateObject(model, modelValidationRules).then(function() {
 
 Run in a console: `gulp watch` or if your IDE transpiles Typescript files automatically, just run `gulp watch:tests`.
 Alternatively, you can use any other way to run tests in you IDE.
+
+[npm-url]:https://npmjs.org/package/stuff-validation
+[npm-image]:https://badge.fury.io/js/stuff-validation.svg
+[travis-url]:https://travis-ci.org/pierrecle/stuff-validation
+[travis-image]:https://travis-ci.org/pierrecle/stuff-validation.svg?branch=master
+[coveralls-url]:https://coveralls.io/github/pierrecle/stuff-validation?branch=master
+[coveralls-image]:https://coveralls.io/repos/github/pierrecle/stuff-validation/badge.svg?branch=master
